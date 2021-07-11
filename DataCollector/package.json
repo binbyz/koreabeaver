@@ -1,0 +1,14 @@
+{
+  "name": "koreabeaver-datacollector",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/index.ts"
+  },
+  "author": "kingz",
+  "devDependencies": {
+    "@types/node": "^16.3.1",
+    "dotenv": "^10.0.0"
+  }
+}
