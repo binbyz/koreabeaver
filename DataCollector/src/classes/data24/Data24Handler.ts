@@ -7,7 +7,7 @@ export default class Data24Handler extends RequestHandler
   private decodingKey: string | undefined;
 
   protected requestUri: string | null = null;
-  private requestParams: Data24.Data24Params;
+  private requestParams: Data24.RequestParams;
 
   public constructor(encodingKey: string, decodingKey: string | undefined = undefined)
   {

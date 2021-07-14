@@ -10,11 +10,13 @@ export type HttpMethods =
 
 export type Protocols = 'http' | 'https';
 
-export namespace Data24 {
+export namespace Data24
+{
   export const API_MDCIN_HOST = 'http://apis.data.go.kr';
   export const API_MDCIN_URI = '/1471000/MdcinExaathrService01/getMdcinExaathrList01';
 
-  export interface Data24Params {
+  export interface RequestParams
+  {
     rows: number;
     page: number;
   };
