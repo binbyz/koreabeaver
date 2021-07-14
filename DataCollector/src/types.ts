@@ -14,7 +14,8 @@ export namespace Data24 {
   export const API_MDCIN_HOST = 'http://apis.data.go.kr';
   export const API_MDCIN_URI = '/1471000/MdcinExaathrService01/getMdcinExaathrList01';
 
-  interface MdcinParams {
-
+  export interface Data24Params {
+    rows: number;
+    page: number;
   };
 }

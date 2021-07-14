@@ -1,12 +1,13 @@
 import RequestHandler from '../request/RequestHandler';
+import { Data24 } from '../../types';
 
 export default class Data24Handler extends RequestHandler
 {
   private encodingKey: string;
   private decodingKey: string | undefined;
-  private rows: number = 1;
-  private page: number = 1;
+
   protected requestUri: string | null = null;
+  private requestParams: Data24.Data24Params;
 
   public constructor(encodingKey: string, decodingKey: string | undefined = undefined)
   {
@@ -14,6 +15,11 @@ export default class Data24Handler extends RequestHandler
 
     this.encodingKey = encodingKey
     this.decodingKey = decodingKey
+
+    this.requestParams = {
+      rows: 1,
+      page: 1,
+    };
   }
 
   public request(): Promise<string>
@@ -35,7 +41,7 @@ export default class Data24Handler extends RequestHandler
    */
   public setNumOfRows(rows: number): void
   {
-    this.rows = rows
+    this.requestParams.rows = rows
   }
 
   /**
@@ -43,7 +49,7 @@ export default class Data24Handler extends RequestHandler
    */
   public setPageNo(page: number): void
   {
-    this.page = page
+    this.requestParams.page = page
   }
 
   protected getEncodingKey(): string
