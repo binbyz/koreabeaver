@@ -26,16 +26,16 @@ export default class RequestHandler
         let data: Buffer[] = [];
 
         response.on('data', chunk => data.push(chunk));
-        response.on('error', reject)
+        response.on('error', reject);
 
         // resolved
         response.on('end', () => resolve(
           Buffer.concat(data).toString()
-        ))
+        ));
 
         // TODO `postData`
         // https://stackoverflow.com/a/66536053/4188073
-      })
+      });
     });
   }
 
