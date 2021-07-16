@@ -30,7 +30,6 @@ export default class RequestHandler
         const data: Buffer[] = [];
 
         response.on('data', chunk => {
-          console.log(chunk.toString());
           data.push(chunk)
         });
 
