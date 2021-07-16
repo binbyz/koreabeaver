@@ -19,5 +19,13 @@ export namespace Data24
   {
     rows: number;
     page: number;
-  };
+  }
+
+  export interface Data24HandlerInterface
+  {
+    call: () => Promise<string>;
+    setRequestUri: (requestUri: string) => void;
+    setNumOfRows: (rows: number) => void;
+    setPageNo: (page: number) => void;
+  }
 }

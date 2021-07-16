@@ -4,7 +4,7 @@ import { HttpMethods, Protocols } from '../../types';
 
 export default class RequestHandler
 {
-  public async request(method: HttpMethods, uri: string): Promise<string>
+  public request(method: HttpMethods, uri: string): Promise<string>
   {
     const parsedUri = new URL(uri);
     const protocol: Protocols = <Protocols>parsedUri.protocol.toLowerCase();
@@ -23,9 +23,12 @@ export default class RequestHandler
           return reject(new Error(`Status Code: ${response.statusCode}`));
         }
 
-        let data: Buffer[] = [];
+        const data: Buffer[] = [];
 
-        response.on('data', chunk => data.push(chunk));
+        response.on('data', chunk => {
+          data.push(chunk)
+          console.log(data)
+        });
         response.on('error', reject);
 
         // resolved

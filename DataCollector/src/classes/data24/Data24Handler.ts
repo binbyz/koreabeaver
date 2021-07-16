@@ -1,7 +1,7 @@
 import RequestHandler from '../request/RequestHandler';
 import { Data24 } from '../../types';
 
-export default class Data24Handler extends RequestHandler
+export default class Data24Handler extends RequestHandler implements Data24.Data24HandlerInterface
 {
   private encodingKey: string;
   private decodingKey: string | undefined;
@@ -22,7 +22,7 @@ export default class Data24Handler extends RequestHandler
     };
   }
 
-  public request(): Promise<string>
+  public call(): Promise<string>
   {
     if (this.requestUri == null) {
       throw new Error(`API가 호출되기 전 URI가 할당되어야 합니다.`);
