@@ -18,8 +18,8 @@ export namespace Data24
   export interface RequestParams
   {
     [index: string]: any; // index signature
-    rows: number;
-    page: number;
+    numOfRows: number;
+    pageNo: number;
     ServiceKey: string;
   }
 

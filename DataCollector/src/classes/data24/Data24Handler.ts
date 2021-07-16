@@ -17,8 +17,8 @@ export default class Data24Handler extends RequestHandler implements Data24.Data
     this.decodingKey = decodingKey
 
     this.requestParams = {
-      "rows": 1,
-      "page": 1,
+      "numOfRows": 1,
+      "pageNo": 1,
       "ServiceKey": this.encodingKey,
     };
   }
@@ -55,7 +55,7 @@ export default class Data24Handler extends RequestHandler implements Data24.Data
    */
   public setNumOfRows(rows: number): void
   {
-    this.requestParams.rows = rows
+    this.requestParams.numOfRows = rows;
   }
 
   /**
@@ -63,7 +63,7 @@ export default class Data24Handler extends RequestHandler implements Data24.Data
    */
   public setPageNo(page: number): void
   {
-    this.requestParams.page = page
+    this.requestParams.pageNo = page;
   }
 
   protected getEncodingKey(): string

@@ -6,16 +6,18 @@ export default class RequestHandler
 {
   public request(method: HttpMethods, uri: string): Promise<string>
   {
-    console.log(method, uri);
     const parsedUri = new URL(uri);
     const protocol: Protocols = <Protocols>parsedUri.protocol.toLowerCase();
     const request = protocol == 'http:' ? http : https;
 
     const params = {
       method,
-      host: parsedUri.host,
+      hostname: parsedUri.hostname,
+      path: parsedUri.pathname + parsedUri.search,
       port: parsedUri.port || protocol == 'https:' ? 443 : 80,
     };
+
+    console.log(params)
 
     return new Promise<string>((resolve, reject) => {
       const requested = request.request(params, response => {

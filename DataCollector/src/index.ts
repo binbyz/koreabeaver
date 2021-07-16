@@ -4,7 +4,7 @@ import Mdcin from './classes/collector/Mdcin';
 const mdcinInst = new Mdcin(process.env.MDCIN_ENCODING_KEY!);
 
 mdcinInst.setPageNo(1);
-mdcinInst.setNumOfRows(1000);
+mdcinInst.setNumOfRows(20);
 
 mdcinInst.call()
   .then(function (response) {
