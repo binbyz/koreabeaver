@@ -17,8 +17,9 @@ export default class Data24Handler extends RequestHandler implements Data24.Data
     this.decodingKey = decodingKey
 
     this.requestParams = {
-      rows: 1,
-      page: 1,
+      "rows": 1,
+      "page": 1,
+      "ServiceKey": this.encodingKey,
     };
   }
 
@@ -28,7 +29,20 @@ export default class Data24Handler extends RequestHandler implements Data24.Data
       throw new Error(`API가 호출되기 전 URI가 할당되어야 합니다.`);
     }
 
-    return super.get(this.requestUri);
+    const requestUriWithParams = `${this.requestUri}?${this.makeRequestParams()}`;
+
+    return super.get(requestUriWithParams);
+  }
+
+  private makeRequestParams(): string
+  {
+    const params = [];
+
+    for (let key of Object.keys(this.requestParams)) {
+      params.push(`${key}=${this.requestParams[key]}`);
+    }
+
+    return params.join('&');
   }
 
   public setRequestUri(requestUri: string): void

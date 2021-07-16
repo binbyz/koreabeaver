@@ -8,7 +8,7 @@ export type HttpMethods =
   'PUT' | 'DELETE' | 'CONNECT' |
   'OPTIONS' | 'TRACE' | 'PATCH';
 
-export type Protocols = 'http' | 'https';
+export type Protocols = 'http:' | 'https:';
 
 export namespace Data24
 {
@@ -17,8 +17,10 @@ export namespace Data24
 
   export interface RequestParams
   {
+    [index: string]: any; // index signature
     rows: number;
     page: number;
+    ServiceKey: string;
   }
 
   export interface Data24HandlerInterface

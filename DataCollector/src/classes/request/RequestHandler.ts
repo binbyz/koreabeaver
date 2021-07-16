@@ -6,29 +6,32 @@ export default class RequestHandler
 {
   public request(method: HttpMethods, uri: string): Promise<string>
   {
+    console.log(method, uri);
     const parsedUri = new URL(uri);
     const protocol: Protocols = <Protocols>parsedUri.protocol.toLowerCase();
-    const request = protocol == 'http' ? http : https;
+    const request = protocol == 'http:' ? http : https;
 
     const params = {
       method,
       host: parsedUri.host,
-      port: parsedUri.port || protocol == 'https' ? 443 : 80,
+      port: parsedUri.port || protocol == 'https:' ? 443 : 80,
     };
 
     return new Promise<string>((resolve, reject) => {
-      request.request(params, response => {
+      const requested = request.request(params, response => {
         // rejected
         if (this.isNotValidStatusCode(response.statusCode)) {
+          // console.log(response);
           return reject(new Error(`Status Code: ${response.statusCode}`));
         }
 
         const data: Buffer[] = [];
 
         response.on('data', chunk => {
+          console.log(chunk.toString());
           data.push(chunk)
-          console.log(data)
         });
+
         response.on('error', reject);
 
         // resolved
@@ -39,6 +42,8 @@ export default class RequestHandler
         // TODO `postData`
         // https://stackoverflow.com/a/66536053/4188073
       });
+
+      requested.end();
     });
   }
 
@@ -47,12 +52,12 @@ export default class RequestHandler
     return (statusCode == undefined || statusCode < 200 || statusCode >= 300);
   }
 
-  public async get(uri: string): Promise<string>
+  public get(uri: string): Promise<string>
   {
     return this.request('GET', uri);
   }
 
-  public async post(uri: string): Promise<string>
+  public post(uri: string): Promise<string>
   {
     return this.request('POST', uri);
   }
