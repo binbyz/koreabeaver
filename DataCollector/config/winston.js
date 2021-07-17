@@ -5,7 +5,7 @@ const logDir = 'logs';
 const { combine, timestamp, printf } = winston.format;
 
 const logFormat = printf(info => {
-  return `${info.timestamp} ${info.level}:: ${info.message}`;
+  return `${info.timestamp} ${info.level}: ${info.message}`;
 });
 
 const logger = winston.createLogger({
@@ -31,7 +31,7 @@ const logger = winston.createLogger({
       filename: `%DATE%.error.log`,
       maxFiles: 30,
       zippedArchive: true,
-    })
+    }),
   ]
 });
 
