@@ -11,5 +11,9 @@
   "devDependencies": {
     "@types/node": "^16.3.1",
     "dotenv": "^10.0.0"
+  },
+  "dependencies": {
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.5"
   }
 }
