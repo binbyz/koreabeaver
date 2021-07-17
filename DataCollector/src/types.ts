@@ -15,6 +15,7 @@ export namespace Data24
   export const API_MDCIN_HOST = 'http://apis.data.go.kr';
   export const API_MDCIN_URI = '/1471000/MdcinExaathrService01/getMdcinExaathrList01';
 
+  // ==================================================
   export interface RequestParams
   {
     [index: string]: any; // index signature
@@ -23,11 +24,29 @@ export namespace Data24
     ServiceKey: string;
   }
 
+  // ==================================================
   export interface Data24HandlerInterface
   {
     call: () => Promise<string>;
     setRequestUri: (requestUri: string) => void;
     setNumOfRows: (rows: number) => void;
     setPageNo: (page: number) => void;
+  }
+
+  // ==================================================
+  export enum ModelContentTypes {
+    CONTENT,
+    XML,
+    JSON,
+  }
+
+  export type ModelContents = ModelContentTypes;
+
+  export interface ModelInterface
+  {
+    loadContent: (rawContent: string) => void;
+    loadXML: (rawContent: string) => void;
+    loadJSON: (rawContent: string) => void;
+    throws: (error: Error) => void;
   }
 }
