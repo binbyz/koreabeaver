@@ -1,6 +1,7 @@
 import http from 'http';
 import https from 'https';
 import { HttpMethods, Protocols } from '../../types';
+import { logger } from '../../../config/winston';
 
 export default class RequestHandler
 {
@@ -17,13 +18,13 @@ export default class RequestHandler
       port: parsedUri.port || protocol == 'https:' ? 443 : 80,
     };
 
-    console.log(params)
+    logger.http(`Http Request: ${JSON.stringify(params)}`);
 
     return new Promise<string>((resolve, reject) => {
       const requested = request.request(params, response => {
         // rejected
         if (this.isNotValidStatusCode(response.statusCode)) {
-          // console.log(response);
+          logger.error(`Status Code: ${response.statusCode} - ${JSON.stringify(params)}`);
           return reject(new Error(`Status Code: ${response.statusCode}`));
         }
 
@@ -36,9 +37,7 @@ export default class RequestHandler
         response.on('error', reject);
 
         // resolved
-        response.on('end', () => resolve(
-          Buffer.concat(data).toString()
-        ));
+        response.on('end', () => resolve(Buffer.concat(data).toString()));
 
         // TODO `postData`
         // https://stackoverflow.com/a/66536053/4188073

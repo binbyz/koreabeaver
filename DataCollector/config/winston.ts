@@ -5,7 +5,7 @@ const logDir = 'logs';
 const { combine, timestamp, printf } = winston.format;
 
 const logFormat = printf(info => {
-  return `${info.timestamp} ${info.level}: ${info.message}`;
+  return `${info.timestamp} ${info.level} - ${__filename}: ${info.message}`;
 });
 
 const logger = winston.createLogger({
@@ -16,6 +16,14 @@ const logger = winston.createLogger({
     logFormat,
   ),
   transports: [
+    new winstonDaily({
+      level: 'http',
+      datePattern: 'YYYY-MM-DD',
+      dirname: logDir + '/http',
+      filename: `%DATE%.log`,
+      maxFiles: 30,
+      zippedArchive: true,
+    }),
     new winstonDaily({
       level: 'info',
       datePattern: 'YYYY-MM-DD',
@@ -28,7 +36,7 @@ const logger = winston.createLogger({
       level: 'error',
       datePattern: 'YYYY-MM-DD',
       dirname: logDir + '/error',
-      filename: `%DATE%.error.log`,
+      filename: `%DATE%.log`,
       maxFiles: 30,
       zippedArchive: true,
     }),

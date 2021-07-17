@@ -1,5 +1,6 @@
 import RequestHandler from '../request/RequestHandler';
 import { Data24 } from '../../types';
+import { logger } from '../../../config/winston';
 
 export default class Data24Handler extends RequestHandler implements Data24.Data24HandlerInterface
 {
@@ -8,6 +9,8 @@ export default class Data24Handler extends RequestHandler implements Data24.Data
 
   protected requestUri: string | null = null;
   private requestParams: Data24.RequestParams;
+
+  public readonly ERR_URI_NOT_SET = 'A URI must be assigned before the API is called.';
 
   public constructor(encodingKey: string, decodingKey: string | undefined = undefined)
   {
@@ -26,7 +29,8 @@ export default class Data24Handler extends RequestHandler implements Data24.Data
   public call(): Promise<string>
   {
     if (this.requestUri == null) {
-      throw new Error(`API가 호출되기 전 URI가 할당되어야 합니다.`);
+      logger.error(this.ERR_URI_NOT_SET);
+      throw new Error(this.ERR_URI_NOT_SET);
     }
 
     const requestUriWithParams = `${this.requestUri}?${this.makeRequestParams()}`;
