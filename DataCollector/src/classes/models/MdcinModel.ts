@@ -35,9 +35,8 @@ export default class MdcinModel extends Data24Model<MdcinItem> implements Data24
 
     const items: Array<MdcinItem> = this.content.response.body.items.item;
 
-    // items.forEach((value) => {
-    //   console.log(value);
-    // });
+    // insert massive
+    this.inserts(items);
 
     return true;
   }
