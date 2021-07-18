@@ -34,7 +34,7 @@ export default class Data24Handler extends RequestHandler implements Data24.Data
     }
 
     const requestUriWithParams = `${this.requestUri}?${this.makeRequestParams()}`;
-    logger.info(`Data24 API is called: ${requestUriWithParams}`);
+    logger.info(`Data24Handler Call: ${requestUriWithParams}`);
 
     return super.get(requestUriWithParams);
   }
