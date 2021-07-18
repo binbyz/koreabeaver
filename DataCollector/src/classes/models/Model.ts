@@ -1,14 +1,16 @@
+import MysqlHandler from '../database/MysqlHandler';
 import { Data24 } from '../../types';
 import { logger } from '../../../config/winston';
 import XMLParser from 'fast-xml-parser';
 
-export default class Model implements Data24.ModelInterface
+export default class Model<T> extends MysqlHandler<T> implements Data24.ModelInterface
 {
   protected contentType: Data24.ModelContents;
   protected content: any = null;
 
   public constructor()
   {
+    super();
     this.contentType = Data24.ModelContentTypes.CONTENT;
   }
 

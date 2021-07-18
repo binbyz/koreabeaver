@@ -1,7 +1,7 @@
 import Data24Model from './Data24Model';
 import { Data24 } from '../../types';
 
-interface ItemRow
+interface MdcinItem
 {
   ADM_DISPS_SEQ: number; // 행정처분일련번호
   ENTP_NAME: string; // 업소명
@@ -15,7 +15,7 @@ interface ItemRow
   DISPS_TERM_DATE: string; // 행정처분기간
 }
 
-export default class MdcinModel extends Data24Model implements Data24.ModelHandler
+export default class MdcinModel extends Data24Model<MdcinItem> implements Data24.ModelHandler
 {
   public constructor()
   {
@@ -31,7 +31,7 @@ export default class MdcinModel extends Data24Model implements Data24.ModelHandl
       return false;
     }
 
-    const items: Array<ItemRow> = this.content.response.body.items.item;
+    const items: Array<MdcinItem> = this.content.response.body.items.item;
 
     items.forEach((value) => {
       console.log(value);

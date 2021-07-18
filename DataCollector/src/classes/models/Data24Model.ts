@@ -2,8 +2,13 @@ import Model from './Model';
 import { Data24 } from '../../types';
 import { logger } from '../../../config/winston';
 
-export default class Data24Model extends Model
+export default class Data24Mode<T> extends Model<T>
 {
+  public constructor()
+  {
+    super();
+  }
+
   /**
    * Data24 API의 응답 데이터가 유효한지 확인합니다.
    */
