@@ -17,6 +17,9 @@ interface MdcinItem
 
 export default class MdcinModel extends Data24Model<MdcinItem> implements Data24.ModelHandler
 {
+  protected tableName: string = 'data24_raw_mdcin';
+  protected primaryKey: string = 'id';
+
   public constructor()
   {
     super();
@@ -33,9 +36,11 @@ export default class MdcinModel extends Data24Model<MdcinItem> implements Data24
 
     const items: Array<MdcinItem> = this.content.response.body.items.item;
 
-    items.forEach((value) => {
-      console.log(value);
-    });
+    // items.forEach((value) => {
+    //   console.log(value);
+    // });
+
+    console.log(this.getTableName());
 
     return true;
   }
