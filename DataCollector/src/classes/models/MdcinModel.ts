@@ -30,7 +30,7 @@ export default class MdcinModel extends Data24Model<MdcinItem> implements Data24
    */
   public handle(): boolean
   {
-    if (!this.isValidResponse()) {
+    if (!this.isValidContent()) {
       return false;
     }
 
@@ -39,8 +39,6 @@ export default class MdcinModel extends Data24Model<MdcinItem> implements Data24
     // items.forEach((value) => {
     //   console.log(value);
     // });
-
-    console.log(this.getTableName());
 
     return true;
   }

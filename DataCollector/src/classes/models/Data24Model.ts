@@ -2,7 +2,7 @@ import Model from './Model';
 import { Data24 } from '../../types';
 import { logger } from '../../../config/winston';
 
-export default class Data24Mode<T> extends Model<T>
+export default class Data24Model<T> extends Model<T>
 {
   public constructor()
   {
@@ -12,7 +12,7 @@ export default class Data24Mode<T> extends Model<T>
   /**
    * Data24 API의 응답 데이터가 유효한지 확인합니다.
    */
-  protected isValidResponse(): boolean
+  protected isValidContent(): boolean
   {
     if (typeof this.content == 'object' && 'response' in this.content) {
       if (!Object.values(Data24.ResponseError).includes(this.content.response.header.resultCode)) {
