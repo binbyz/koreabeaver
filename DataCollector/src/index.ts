@@ -5,17 +5,22 @@ import MdcinModel from './classes/models/MdcinModel';
 
 import { logger } from '../config/winston';
 
-logger.info('Start DataCollector');
+main();
 
-const mdcinInst = new Mdcin(process.env.MDCIN_ENCODING_KEY!);
+async function main()
+{
+  logger.info('Start DataCollector');
 
-mdcinInst.setPageNo(1);
-mdcinInst.setNumOfRows(20);
+  const mdcinInst = new Mdcin(process.env.MDCIN_ENCODING_KEY!);
 
-const mdcinModel: MdcinModel = new MdcinModel();
+  mdcinInst.setPageNo(1);
+  mdcinInst.setNumOfRows(20);
 
-mdcinInst.call()
-  .then(response => {
-    mdcinModel.loadXML(response).handle();
-  })
-  .catch(error => mdcinModel.throws(error));
+  const mdcinModel: MdcinModel = new MdcinModel();
+
+  await mdcinInst.call()
+    .then(response => {
+      mdcinModel.loadXML(response).handle();
+    })
+    .catch(error => mdcinModel.throws(error));
+}
