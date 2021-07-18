@@ -4,6 +4,8 @@ import { logger } from '../../../config/winston';
 
 export default class Data24Model<T> extends Model<T>
 {
+  protected primaryKey: string = 'id';
+
   public constructor()
   {
     super();

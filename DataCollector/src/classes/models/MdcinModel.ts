@@ -18,7 +18,6 @@ interface MdcinItem
 export default class MdcinModel extends Data24Model<MdcinItem> implements Data24.ModelHandler
 {
   protected tableName: string = 'data24_raw_mdcin';
-  protected primaryKey: string = 'id';
 
   public constructor()
   {
