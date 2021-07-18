@@ -24,7 +24,7 @@ export default class RequestHandler
       const requested = request.request(params, response => {
         // rejected
         if (this.isNotValidStatusCode(response.statusCode)) {
-          logger.error(`Status Code: ${response.statusCode} - ${JSON.stringify(params)}`);
+          logger.error(`Status Code: ${response.statusCode}: ${JSON.stringify(params)}`);
           return reject(new Error(`Status Code: ${response.statusCode}`));
         }
 

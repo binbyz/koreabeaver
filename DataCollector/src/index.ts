@@ -15,5 +15,7 @@ mdcinInst.setNumOfRows(20);
 const mdcinModel: MdcinModel = new MdcinModel();
 
 mdcinInst.call()
-  .then(response => mdcinModel.loadXML(response))
+  .then(response => {
+    mdcinModel.loadXML(response).handle();
+  })
   .catch(error => mdcinModel.throws(error));

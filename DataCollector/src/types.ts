@@ -15,6 +15,23 @@ export namespace Data24
   export const API_MDCIN_HOST = 'http://apis.data.go.kr';
   export const API_MDCIN_URI = '/1471000/MdcinExaathrService01/getMdcinExaathrList01';
 
+  export enum ResponseError
+  {
+    APPLICATION_ERROR = 1,
+    DB_ERROR,
+    NO_DATA,
+    HTTP_ERROR,
+    SERVICE_TIMEOUT,
+    INVALID_PARAMETERS = 10,
+    NO_REQUIRED_PARAMETERS,
+    API_CLOSED,
+    SERVICE_DENINED = 20,
+    REQUEST_EXCEEDED = 22,
+    INVALID_KEY = 30,
+    EXPIRED_KEY,
+    INVALID_DOMAIN,
+  }
+
   // ==================================================
   export interface RequestParams
   {
@@ -44,9 +61,14 @@ export namespace Data24
 
   export interface ModelInterface
   {
-    loadContent: (rawContent: string) => void;
-    loadXML: (rawContent: string) => void;
-    loadJSON: (rawContent: string) => void;
+    loadContent: (rawContent: string) => this;
+    loadXML: (rawContent: string) => this;
+    loadJSON: (rawContent: string) => this;
     throws: (error: Error) => void;
+  }
+
+  export interface ModelHandler
+  {
+    handle: () => void;
   }
 }
