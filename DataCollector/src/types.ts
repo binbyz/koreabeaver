@@ -10,6 +10,11 @@ export type HttpMethods =
 
 export type Protocols = 'http:' | 'https:';
 
+export interface IndexSignature
+{
+  [index: string]: any // index signature
+}
+
 export namespace Data24
 {
   export const API_MDCIN_HOST = 'http://apis.data.go.kr';
@@ -33,9 +38,8 @@ export namespace Data24
   }
 
   // ==================================================
-  export interface RequestParams
+  export interface RequestParams extends IndexSignature
   {
-    [index: string]: any; // index signature
     numOfRows: number;
     pageNo: number;
     ServiceKey: string;

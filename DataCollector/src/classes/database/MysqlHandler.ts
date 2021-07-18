@@ -1,9 +1,11 @@
 import mysql from 'mysql2/promise';
+import { IndexSignature } from '../../types';
 import { logger } from '../../../config/winston';
+import { isUndefined } from '../../lib/slim';
 
-type QueryType = 'insert' | 'select' | 'update' | 'delete';
+type QueryType = 'insert' | 'select' | 'update' | 'delete' | 'upsert';
 
-export default class MysqlHandler<T>
+export default class MysqlHandler<T extends IndexSignature>
 {
   private static pool: mysql.Pool;
   protected tableName: string = '';
@@ -50,12 +52,14 @@ export default class MysqlHandler<T>
     return connection;
   }
 
+  /**
+   * Inserts
+   * @param massive
+   */
   public async inserts(massive: Array<T>)
   {
     const connection = await MysqlHandler.getConnection();
     const query = this.makeQuery('insert', massive);
-
-    console.log(query);
 
     try {
       await connection.beginTransaction();
@@ -80,30 +84,98 @@ export default class MysqlHandler<T>
     connection.release();
   }
 
-  private makeQuery(queryType: QueryType, datas: Array<T>): string
+  /**
+   * Upserts
+   * @param massive
+   * @param key
+   * @param options
+   */
+  public async upserts(massive: Array<T>, key: string, options: Array<string>)
+  {
+    const connection = await MysqlHandler.getConnection();
+    const query = this.makeQuery('upsert', massive, key, options);
+
+    try {
+      await connection.beginTransaction();
+
+      // <Prepared Statement>
+      massive.forEach(async row => {
+        const values: Array<string> = Object.values(row);
+
+        // ON DUPLICATE KEY UPDATE `key`={VALUES}
+        values.push(row[key]);
+
+        // After `ON DUPLICATE KEY UPDATE `key`={VALUES}, {...}`
+        options.forEach(field => values.push(row[field]));
+
+        await connection.execute(query, values);
+      });
+
+      await connection.commit();
+
+      logger.info(`Total ${massive.length} items was upserted.`);
+    } catch (err) {
+      await connection.rollback();
+
+      logger.error(err.toString());
+    }
+
+  }
+
+  /**
+   * makeQuery
+   * @param queryType
+   * @param datas
+   * @param key
+   * @param options
+   * @returns string
+   */
+  private makeQuery(
+    queryType: QueryType,
+    datas: Array<T>,
+    key: string | undefined = undefined,
+    options: Array<string> | undefined = undefined,
+  ): string
   {
     const queries: Array<string> = [];
 
     switch (queryType) {
       case 'insert':
-        queries.push(
-          `INSERT INTO \`${this.tableName}\`(${Object.keys(datas[0]).map(this.backQuotes).join(', ')})`
-        );
+      case 'upsert':
+        queries.push(`INSERT INTO \`${this.tableName}\`(${Object.keys(datas[0]).map(this.backQuotes).join(', ')})`);
 
         const values: Array<string> = Array.from('?'.repeat(Object.values(datas[0]).length));
 
         queries.push(
           `VALUES (${values.join(', ')})`
         );
+
+        if (queryType == 'upsert' && !isUndefined(key) && !isUndefined(options)) {
+          queries.push(`ON DUPLICATE KEY UPDATE \`${key}\`=?, ${this.makeUpdateParts(<Array<string>>options)}`);
+        }
         break;
       default:
     }
 
-    queries.push(';');
-
     return queries.join(' ');
   }
 
+  /**
+   * makeUpdateParts
+   * @param options
+   * @returns string
+   */
+  private makeUpdateParts(options: Array<string>): string
+  {
+    return options.map(this.backQuotes).map(value => value + '=?').join(', ');
+  }
+
+  /**
+   * backQuotes
+   * @param value
+   * @param index
+   * @returns string
+   */
   private backQuotes(value: string, index: number): string
   {
     return ('`' + value + '`');

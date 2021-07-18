@@ -3,6 +3,7 @@ import { Data24 } from '../../types';
 
 interface MdcinItem
 {
+  [index: string]: any;
   ADM_DISPS_SEQ: number; // 행정처분일련번호
   ENTP_NAME: string; // 업소명
   ADDR: string | null; // 업소소재지
@@ -35,8 +36,8 @@ export default class MdcinModel extends Data24Model<MdcinItem> implements Data24
 
     const items: Array<MdcinItem> = this.content.response.body.items.item;
 
-    // insert massive
-    this.inserts(items);
+    // upsert massive
+    this.upserts(items, 'ADM_DISPS_SEQ', ['ENTP_NAME', 'ADDR', 'ITEM_NAME']);
 
     return true;
   }
