@@ -15,6 +15,14 @@ export interface IndexSignature
   [index: string]: any // index signature
 }
 
+export namespace Collector
+{
+  export enum Types
+  {
+    DATA24_MDCIN = 1,
+  }
+}
+
 export namespace Data24
 {
   export const API_MDCIN_HOST = 'http://apis.data.go.kr';
@@ -74,5 +82,13 @@ export namespace Data24
   export interface ModelHandler
   {
     handle: () => void;
+  }
+
+  export interface ModelPageCounter extends IndexSignature
+  {
+    totalPage: number;
+    numOfRows: number;
+    pageNo: number;
+    totalCount: number;
   }
 }
