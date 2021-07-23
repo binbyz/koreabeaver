@@ -1,9 +1,8 @@
 import Data24Model from './Data24Model';
-import { Data24 } from '../../types';
+import { Data24, IndexSignature } from '../../types';
 
-interface MdcinItem
+interface MdcinItem extends IndexSignature
 {
-  [index: string]: any;
   ADM_DISPS_SEQ: number; // 행정처분일련번호
   ENTP_NAME: string; // 업소명
   ADDR: string | null; // 업소소재지
@@ -33,6 +32,8 @@ export default class MdcinModel extends Data24Model<MdcinItem> implements Data24
     if (!this.isValidContent()) {
       return false;
     }
+
+    console.log(this.pageCounter());
 
     const items: Array<MdcinItem> = this.content.response.body.items.item;
 
