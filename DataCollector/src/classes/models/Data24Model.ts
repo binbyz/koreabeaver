@@ -27,4 +27,19 @@ export default class Data24Model<T> extends Model<T>
     logger.error(`cannot parsing response data: ${JSON.stringify(this.content)}`);
     return false;
   }
+
+  protected pageCounter(): Data24.ModelPageCounter
+  {
+    const numOfRows: number = this.content.response.body.numOfRows;
+    const pageNo: number = this.content.response.body.pageNo;
+    const totalCount: number = this.content.response.body.totalCount;
+    const totalPage = Math.ceil(totalCount / numOfRows);
+
+    return {
+      totalPage,
+      numOfRows,
+      pageNo,
+      totalCount,
+    };
+  }
 }
