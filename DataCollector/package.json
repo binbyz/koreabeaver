@@ -6,7 +6,8 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "test": "ts-node src/index.ts",
-    "build": "tsc --project tsconfig.json src/*.ts"
+    "build": "tsc --build",
+    "clean": "tsc --clean"
   },
   "author": "kingz",
   "devDependencies": {
