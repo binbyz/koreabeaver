@@ -13,3 +13,7 @@ export function isFloat(n: number): boolean {
 export function isUndefined(n: any): boolean {
   return typeof n === 'undefined';
 }
+
+export function getLocaleDatetime(): string {
+  return new Date().toLocaleDateString('ko-KR', { "timeZone": 'UTC' });
+}
