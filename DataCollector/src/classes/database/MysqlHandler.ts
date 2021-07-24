@@ -70,38 +70,6 @@ export default class MysqlHandler<T extends IndexSignature>
   }
 
   /**
-   * Inserts
-   * @param massive
-   */
-  public async inserts(massive: Array<T>)
-  {
-    const connection = await MysqlHandler.getConnection();
-    const query = this.makeInsertQuery('insert', massive);
-
-    try {
-      await connection.beginTransaction();
-
-      // <Prepared Statement>
-      // https://www.npmjs.com/package/mysql2#using-prepared-statements
-      massive.forEach(async row => {
-        // If you execute same statement again, it will be picked from a LRU cache
-        // which will save query preparation time and give better performance
-        await connection.execute(query, Object.values(row));
-      });
-
-      await connection.commit();
-
-      logger.info(`Total ${massive.length} items was inserted.`);
-    } catch (err) {
-      await connection.rollback();
-
-      logger.error(err.toString());
-    }
-
-    connection.release();
-  }
-
-  /**
    * select
    * @param fields string | string[]
    * @returns
@@ -195,9 +163,9 @@ export default class MysqlHandler<T extends IndexSignature>
       return Object.values(rows);
     } catch (err) {
       logger.error(err.toString());
+    } finally {
+      connection.release();
     }
-
-    connection.release();
 
     return [];
   }
@@ -223,6 +191,38 @@ export default class MysqlHandler<T extends IndexSignature>
   }
 
   /**
+   * Inserts
+   * @param massive
+   */
+  public async inserts(massive: Array<T>)
+  {
+    const connection = await MysqlHandler.getConnection();
+    const query = this.makeInsertQuery('insert', massive);
+
+    try {
+      await connection.beginTransaction();
+
+      // <Prepared Statement>
+      // https://www.npmjs.com/package/mysql2#using-prepared-statements
+      massive.forEach(async row => {
+        // If you execute same statement again, it will be picked from a LRU cache
+        // which will save query preparation time and give better performance
+        await connection.execute(query, Object.values(row));
+      });
+
+      await connection.commit();
+
+      logger.info(`Total ${massive.length} items was inserted.`);
+    } catch (err) {
+      await connection.rollback();
+
+      logger.error(err.toString());
+    } finally {
+      connection.release();
+    }
+  }
+
+  /**
    * update
    * @param update T
    */
@@ -245,9 +245,15 @@ export default class MysqlHandler<T extends IndexSignature>
     queries.push(updateFields.join(', '));
     queries.push(`WHERE ${this.getWhereStatement()}`);
 
-    const result = await connection.execute(queries.join(' '), [...values, ...this.getConditonValues()]);
+    try {
+      const result = await connection.execute(queries.join(' '), [...values, ...this.getConditonValues()]);
 
-    return result;
+      return result;
+    } catch (err) {
+      logger.error(err.toString());
+    } finally {
+      connection.release();
+    }
   }
 
   /**
@@ -282,8 +288,9 @@ export default class MysqlHandler<T extends IndexSignature>
       logger.info(`Total ${massive.length} items was upserted.`);
     } catch (err) {
       await connection.rollback();
-
       logger.error(err.toString());
+    } finally {
+      connection.release();
     }
   }
 
