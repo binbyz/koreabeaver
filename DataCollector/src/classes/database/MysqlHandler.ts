@@ -8,7 +8,8 @@ type QueryType = 'insert' | 'select' | 'update' | 'delete' | 'upsert';
 /**
  * `boolean` is EXISTS
  */
-type whereValueCondition = string | number | boolean;
+type WhereValueCondition = string | number | boolean;
+type OrderTypes = 'asc' | 'desc';
 
 const CONNECTION_TIMEOUT = 10;
 const DEFAULT_LIMIT = 2000;
@@ -17,10 +18,11 @@ export default class MysqlHandler<T extends IndexSignature>
 {
   private static pool: mysql.Pool;
 
-  private whereCondition: Map<string, whereValueCondition> = new Map<string, whereValueCondition>();
+  private whereCondition: Map<string, WhereValueCondition> = new Map<string, WhereValueCondition>();
   private fields: string[] = [];
   private _offset: number = 0;
   private _limit: number = DEFAULT_LIMIT;
+  private _orderBy: Map<string, OrderTypes> = new Map<string, OrderTypes>();
 
   // TODO implements `database name` property
 
@@ -121,7 +123,7 @@ export default class MysqlHandler<T extends IndexSignature>
    * @param condition whereValueCondition
    * @returns this
    */
-  public where(key: string, condition: whereValueCondition): this
+  public where(key: string, condition: WhereValueCondition): this
   {
     this.whereCondition.set(key, condition);
 
@@ -153,6 +155,19 @@ export default class MysqlHandler<T extends IndexSignature>
   }
 
   /**
+   * set orderby
+   * @param field string
+   * @param order OrderTypes
+   * @returns
+   */
+  public orderBy(field: string, order: OrderTypes): this
+  {
+    this._orderBy.set(field, order);
+
+    return this;
+  }
+
+  /**
    * 모든 `whereCondition`을 초기화합니다.
    * @returns this
    */
@@ -163,10 +178,48 @@ export default class MysqlHandler<T extends IndexSignature>
     return this;
   }
 
-  public get(): void
+  /**
+   * get
+   * @param instantLimit
+   * @returns
+   */
+  public async get(instantLimit: number | undefined = undefined)
   {
-    const query: string = this.makeSelectQuery();
-    console.log(query);
+    const connection = await MysqlHandler.getConnection();
+    const query: string = this.makeSelectQuery(instantLimit);
+
+    try {
+      const condition: Array<WhereValueCondition> = this.getConditonValues();
+      const [rows, columns] = await connection.execute(query, condition);
+
+      return Object.values(rows);
+    } catch (err) {
+      logger.error(err.toString());
+    }
+
+    connection.release();
+
+    return [];
+  }
+
+  /**
+   * first row
+   * @returns
+   */
+  public async first()
+  {
+    const rows = await this.get(1);
+
+    return rows.length ? rows[0] : null;
+  }
+
+  /**
+   * 현재 `where` 조건에 걸려있는 값들을 리턴합니다.
+   * @returns Array<whereValueCondition>
+   */
+  public getConditonValues(): Array<WhereValueCondition>
+  {
+    return Array.from(this.whereCondition).map(row => row[1]);
   }
 
   /**
@@ -204,7 +257,6 @@ export default class MysqlHandler<T extends IndexSignature>
 
       logger.error(err.toString());
     }
-
   }
 
   /**
@@ -245,7 +297,7 @@ export default class MysqlHandler<T extends IndexSignature>
     return queries.join(' ');
   }
 
-  private makeSelectQuery(): string
+  private makeSelectQuery(instantLimit: number | undefined = undefined): string
   {
     const queries: Array<string> = [];
 
@@ -258,7 +310,7 @@ export default class MysqlHandler<T extends IndexSignature>
     } else {
       const conditions: string[] = [];
 
-      this.whereCondition.forEach((value: whereValueCondition, key: string) => {
+      this.whereCondition.forEach((value: WhereValueCondition, key: string) => {
         switch (typeof value) {
           case 'string':
           case 'number':
@@ -275,7 +327,11 @@ export default class MysqlHandler<T extends IndexSignature>
     }
 
     // offset
-    queries.push(`LIMIT ${this._limit} OFFSET ${this._offset}`);
+    if (instantLimit !== undefined) {
+      queries.push(`LIMIT ${instantLimit}`);
+    } else {
+      queries.push(`LIMIT ${this._limit} OFFSET ${this._offset}`);
+    }
 
     return queries.join(' ');
   }
