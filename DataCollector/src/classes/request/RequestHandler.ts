@@ -1,7 +1,7 @@
 import http from 'http';
 import https from 'https';
 import { HttpMethods, Protocols } from '../../types';
-import { logger } from '../../../config/winston';
+import { logger } from '../../config/winston';
 
 export default class RequestHandler
 {

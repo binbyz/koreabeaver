@@ -1,6 +1,6 @@
 import mysql from 'mysql2/promise';
 import { IndexSignature } from '../../types';
-import { logger } from '../../../config/winston';
+import { logger } from '../../config/winston';
 import { isUndefined } from '../../lib/slim';
 
 type QueryType = 'insert' | 'select' | 'update' | 'delete' | 'upsert';

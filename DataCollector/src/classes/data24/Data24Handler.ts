@@ -1,6 +1,6 @@
 import RequestHandler from '../request/RequestHandler';
 import { Data24 } from '../../types';
-import { logger } from '../../../config/winston';
+import { logger } from '../../config/winston';
 
 export default class Data24Handler extends RequestHandler implements Data24.Data24HandlerInterface
 {

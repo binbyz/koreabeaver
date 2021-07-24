@@ -4,7 +4,7 @@ import Mdcin from './classes/collector/Mdcin';
 import MdcinModel from './classes/models/MdcinModel';
 import CollectorHistory from './classes/models/CollectorHistory';
 
-import { logger } from '../config/winston';
+import { logger } from './config/winston';
 import { Collector } from './types';
 import { getLocaleDatetime } from './lib/slim';
 

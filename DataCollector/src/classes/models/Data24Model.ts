@@ -1,6 +1,6 @@
 import Model from './Model';
 import { Data24 } from '../../types';
-import { logger } from '../../../config/winston';
+import { logger } from '../../config/winston';
 
 export default class Data24Model<T> extends Model<T>
 {
