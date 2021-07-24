@@ -27,7 +27,7 @@ export default class MdcinModel extends Data24Model<MdcinItem> implements Data24
   /**
    * handle
    */
-  public handle(): boolean
+  public async handle()
   {
     if (!this.isValidContent()) {
       return false;
@@ -36,7 +36,7 @@ export default class MdcinModel extends Data24Model<MdcinItem> implements Data24
     const items: Array<MdcinItem> = this.content.response.body.items.item;
 
     // upsert massive
-    this.upserts(items, 'ADM_DISPS_SEQ', ['ENTP_NAME', 'ADDR', 'ITEM_NAME']);
+    await this.upserts(items, 'ADM_DISPS_SEQ', ['ENTP_NAME', 'ADDR', 'ITEM_NAME']);
 
     return true;
   }

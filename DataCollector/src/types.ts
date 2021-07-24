@@ -81,7 +81,7 @@ export namespace Data24
 
   export interface ModelHandler
   {
-    handle: () => void;
+    handle: () => any;
   }
 
   export interface ModelPageCounter extends IndexSignature
