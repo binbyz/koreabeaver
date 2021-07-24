@@ -3,8 +3,8 @@ import { IndexSignature, Collector } from '../../types';
 
 interface CrawlerHistoryItem extends IndexSignature
 {
-  type: Collector.Types;
-  extra_data: JSON;
+  type?: Collector.Types;
+  extra_data: object;
 }
 
 export default class CollectorHistory extends Model<CrawlerHistoryItem>

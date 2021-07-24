@@ -33,8 +33,6 @@ export default class MdcinModel extends Data24Model<MdcinItem> implements Data24
       return false;
     }
 
-    console.log(this.pageCounter());
-
     const items: Array<MdcinItem> = this.content.response.body.items.item;
 
     // upsert massive
