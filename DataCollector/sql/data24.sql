@@ -18,5 +18,6 @@ CREATE TABLE `collector_history` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `type` tinyint unsigned NOT NULL COMMENT '크롤러 타입',
   `extra_data` json DEFAULT NULL COMMENT '각 크롤러의 중요 마지막 데이터',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`),
+  KEY `unq_type` (`type`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
