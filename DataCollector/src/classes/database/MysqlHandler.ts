@@ -16,7 +16,7 @@ const DEFAULT_LIMIT = 2000;
 
 export default class MysqlHandler<T extends IndexSignature>
 {
-  private static pool: mysql.Pool;
+  private static pool: mysql.Pool | undefined = undefined;
 
   private whereCondition: Map<string, WhereValueCondition> = new Map<string, WhereValueCondition>();
   private fields: string[] = [];
@@ -58,15 +58,13 @@ export default class MysqlHandler<T extends IndexSignature>
     // });
   }
 
-  public static async getConnection(): Promise<mysql.PoolConnection>
+  public static async getPool(): Promise<mysql.Pool>
   {
-    if (!MysqlHandler.pool) {
+    if (MysqlHandler.pool === undefined) {
       MysqlHandler.connect();
     }
 
-    const connection = await MysqlHandler.pool.getConnection();
-
-    return connection;
+    return <mysql.Pool>MysqlHandler.pool;
   }
 
   /**
@@ -153,7 +151,7 @@ export default class MysqlHandler<T extends IndexSignature>
    */
   public async get(instantLimit: number | undefined = undefined)
   {
-    const connection = await MysqlHandler.getConnection();
+    const connection = await MysqlHandler.getPool();
     const query: string = this.makeSelectQuery(instantLimit);
 
     try {
@@ -163,8 +161,6 @@ export default class MysqlHandler<T extends IndexSignature>
       return Object.values(rows);
     } catch (err) {
       logger.error(err.toString());
-    } finally {
-      connection.release();
     }
 
     return [];
@@ -196,7 +192,7 @@ export default class MysqlHandler<T extends IndexSignature>
    */
   public async inserts(massive: Array<T>)
   {
-    const connection = await MysqlHandler.getConnection();
+    const connection = await (await MysqlHandler.getPool()).getConnection();
     const query = this.makeInsertQuery('insert', massive);
 
     try {
@@ -228,7 +224,7 @@ export default class MysqlHandler<T extends IndexSignature>
    */
   public async update(update: T)
   {
-    const connection = await MysqlHandler.getConnection();
+    const connection = await MysqlHandler.getPool();
     const queries: string[] = [];
 
     queries.push(`UPDATE \`${this.tableName}\` SET`);
@@ -251,8 +247,6 @@ export default class MysqlHandler<T extends IndexSignature>
       return result;
     } catch (err) {
       logger.error(err.toString());
-    } finally {
-      connection.release();
     }
   }
 
@@ -264,7 +258,7 @@ export default class MysqlHandler<T extends IndexSignature>
    */
   public async upserts(massive: Array<T>, key: string, options: Array<string>)
   {
-    const connection = await MysqlHandler.getConnection();
+    const connection = await (await MysqlHandler.getPool()).getConnection();
     const query = this.makeInsertQuery('upsert', massive, key, options);
 
     try {
