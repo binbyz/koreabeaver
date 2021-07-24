@@ -225,8 +225,8 @@ export default class MysqlHandler<T extends IndexSignature>
   /**
    * Upserts
    * @param massive
-   * @param key
-   * @param options
+   * @param key `ON DUPLICATE KEY UPDATE`에 걸릴 조건 키명
+   * @param options 어떤 필드들이 업데이트 될 것인지
    */
   public async upserts(massive: Array<T>, key: string, options: Array<string>)
   {
