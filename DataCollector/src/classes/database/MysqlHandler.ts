@@ -8,10 +8,10 @@ type QueryType = 'insert' | 'select' | 'update' | 'delete' | 'upsert';
 /**
  * `boolean` is EXISTS
  */
-type WhereValueCondition = string | number | boolean;
+type WhereValueCondition = string | number | boolean | object;
 type OrderTypes = 'asc' | 'desc';
 
-const CONNECTION_TIMEOUT = 10;
+const CONNECTION_TIMEOUT = 20;
 const DEFAULT_LIMIT = 2000;
 
 export default class MysqlHandler<T extends IndexSignature>
@@ -223,6 +223,34 @@ export default class MysqlHandler<T extends IndexSignature>
   }
 
   /**
+   * update
+   * @param update T
+   */
+  public async update(update: T)
+  {
+    const connection = await MysqlHandler.getConnection();
+    const queries: string[] = [];
+
+    queries.push(`UPDATE \`${this.tableName}\` SET`);
+
+    const fields: string[] = Object.keys(update);
+    const values: Array<WhereValueCondition> = Object.values(update);
+
+    const updateFields: string[] = [];
+
+    fields.forEach(field => {
+      updateFields.push(`\`${field}\`=?`);
+    });
+
+    queries.push(updateFields.join(', '));
+    queries.push(`WHERE ${this.getWhereStatement()}`);
+
+    const result = await connection.execute(queries.join(' '), [...values, ...this.getConditonValues()]);
+
+    return result;
+  }
+
+  /**
    * Upserts
    * @param massive
    * @param key `ON DUPLICATE KEY UPDATE`에 걸릴 조건 키명
@@ -297,6 +325,26 @@ export default class MysqlHandler<T extends IndexSignature>
     return queries.join(' ');
   }
 
+  private getWhereStatement(): string
+  {
+    const conditions: string[] = [];
+
+    this.whereCondition.forEach((value: WhereValueCondition, key: string) => {
+      switch (typeof value) {
+        case 'string':
+        case 'number':
+          conditions.push(`\`${key}\`=?`);
+          break;
+        case 'boolean':
+          conditions.push(`\`${key}\` IS ${value ? 'EXISTS' : 'NOT EXISTS'}`);
+          break;
+        default:
+      }
+    });
+
+    return conditions.join(' AND ');
+  }
+
   private makeSelectQuery(instantLimit: number | undefined = undefined): string
   {
     const queries: Array<string> = [];
@@ -308,22 +356,7 @@ export default class MysqlHandler<T extends IndexSignature>
     if (!this.whereCondition.size) {
       queries.push('1');
     } else {
-      const conditions: string[] = [];
-
-      this.whereCondition.forEach((value: WhereValueCondition, key: string) => {
-        switch (typeof value) {
-          case 'string':
-          case 'number':
-            conditions.push(`\`${key}\`=?`);
-            break;
-          case 'boolean':
-            conditions.push(`\`${key}\` IS ${value ? 'EXISTS' : 'NOT EXISTS'}`);
-            break;
-          default:
-        }
-      });
-
-      queries.push(conditions.join(' AND '));
+      queries.push(this.getWhereStatement());
     }
 
     // offset
