@@ -1,7 +1,7 @@
 <template lang="pug">
 header.app-header
   h1.logo
-    a(href="./") 대한민국 <strong>의약품</strong> 행정처분 정보
+    a(href="./") <strong>의약품</strong> 행정처분 <strong>검색</strong>
 </template>
 
 <script lang="ts">
@@ -18,11 +18,15 @@ export default defineComponent({
 .app-header {
   display: flex;
   text-align: center;
-  min-height: 300px;
+  min-height: 100px;
   align-items: center;
+  background-color: $accent-color;
   .logo {
     display: block;
     flex: 1;
+    a {
+      color: $color-white;
+    }
   }
 }
 </style>

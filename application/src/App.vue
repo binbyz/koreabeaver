@@ -1,15 +1,18 @@
 <template lang="pug">
 #app
   AppHeader
+  AppNavSearch
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 import AppHeader from '@/components/AppHeader.vue'
+import AppNavSearch from '@/components/AppNavSearch.vue'
 
 export default defineComponent({
   components: {
-    AppHeader
+    AppHeader,
+    AppNavSearch
   }
 })
 </script>
