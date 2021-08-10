@@ -1,23 +1,16 @@
-import RequestHandler from '../request/RequestHandler';
-import { Data24 } from '../../types';
-import { logger } from '../../config/winston';
+import EnvironmentHandler from './EnvironmentHandler';
+import { Data24 } from '../../../types';
+import { logger } from '../../../config/winston';
 
-export default class Data24Handler extends RequestHandler implements Data24.Data24HandlerInterface
+export default class Data24Handler extends EnvironmentHandler implements Data24.Data24HandlerInterface
 {
-  private encodingKey: string;
-  private decodingKey: string | undefined;
-
   protected requestUri: string | null = null;
   private requestParams: Data24.RequestParams;
-
   public readonly ERR_URI_NOT_SET = 'A URI must be assigned before the API is called.';
 
   public constructor(encodingKey: string, decodingKey: string | undefined = undefined)
   {
-    super()
-
-    this.encodingKey = encodingKey
-    this.decodingKey = decodingKey
+    super(encodingKey, decodingKey);
 
     this.requestParams = {
       "numOfRows": 1,

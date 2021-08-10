@@ -1,4 +1,4 @@
-import Data24Handler from '../data24/Data24Handler';
+import Data24Handler from './handler/Data24Handler';
 import { Data24 } from '../../types';
 
 /**

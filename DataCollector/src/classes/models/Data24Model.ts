@@ -1,8 +1,8 @@
-import Model from './Model';
+import ModelHandler from './handler/ModelHandler';
 import { Data24 } from '../../types';
 import { logger } from '../../config/winston';
 
-export default class Data24Model<T> extends Model<T>
+export default class Data24Model<T> extends ModelHandler<T>
 {
   protected primaryKey: string = 'id';
 
