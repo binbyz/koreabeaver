@@ -1,6 +1,6 @@
 import 'dotenv/config';
 
-import Mdcin from './classes/collector/Mdcin';
+import MdcinCollector from './classes/collector/MdcinCollector';
 import MdcinModel from './classes/models/MdcinModel';
 import CollectorHistory from './classes/models/CollectorHistory';
 
@@ -16,7 +16,7 @@ main();
  */
 function main()
 {
-  const collector = new Mdcin(process.env.MDCIN_ENCODING_KEY!);
+  const collector = new MdcinCollector(process.env.MDCIN_ENCODING_KEY!);
 
   const historyModel = new CollectorHistory();
   const mdcinModel: MdcinModel = new MdcinModel();
