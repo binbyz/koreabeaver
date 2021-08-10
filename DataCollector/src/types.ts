@@ -20,6 +20,7 @@ export namespace Collector
   export enum Types
   {
     DATA24_MDCIN = 1,
+    APT_TRADE = 2,
   }
 }
 
