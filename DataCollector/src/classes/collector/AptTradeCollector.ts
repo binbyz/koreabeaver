@@ -11,4 +11,6 @@ export default class AptTradeCollector extends Data24Handler
     super(encodingKey, decodingKey)
     super.setRequestUri(Data24.API_APT_TRADE + Data24.API_APT_TRADE)
   }
+
+
 }
