@@ -48,29 +48,31 @@ export default class MolitHandler extends EnvironmentHandler implements Data24.D
     this.requestUri = requestUri.trim();
   }
 
-  /**
-   * 공통 Params
-   */
   public setNumOfRows(rows: number): void
   {
     this.requestParams.numOfRows = rows;
   }
 
-  /**
-   * 공통 Params
-   */
   public setPageNo(page: number): void
   {
     this.requestParams.pageNo = page;
   }
 
-  protected getEncodingKey(): string
+  /**
+   * 지역코드
+   * @param code 지역코드
+   */
+  public setLawdCd(code: string): void
   {
-    return this.encodingKey
+
   }
 
-  protected getDecodingKey(): string | undefined
+  /**
+   * 계약월
+   * @param ymd 계약월
+   */
+  public setDealYmd(ymd: string): void
   {
-    return this.decodingKey
+
   }
 }

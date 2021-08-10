@@ -48,29 +48,13 @@ export default class Data24Handler extends EnvironmentHandler implements Data24.
     this.requestUri = requestUri.trim();
   }
 
-  /**
-   * 공통 Params
-   */
   public setNumOfRows(rows: number): void
   {
     this.requestParams.numOfRows = rows;
   }
 
-  /**
-   * 공통 Params
-   */
   public setPageNo(page: number): void
   {
     this.requestParams.pageNo = page;
-  }
-
-  protected getEncodingKey(): string
-  {
-    return this.encodingKey
-  }
-
-  protected getDecodingKey(): string | undefined
-  {
-    return this.decodingKey
   }
 }

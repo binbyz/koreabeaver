@@ -1,4 +1,4 @@
-import Data24Model from './Data24Model';
+import Data24ModelHandler from './handler/Data24Model';
 import { Data24, IndexSignature } from '../../types';
 
 interface MdcinItem extends IndexSignature
@@ -15,7 +15,7 @@ interface MdcinItem extends IndexSignature
   DISPS_TERM_DATE: string; // 행정처분기간
 }
 
-export default class MdcinModel extends Data24Model<MdcinItem> implements Data24.ModelHandler
+export default class MdcinModel extends Data24ModelHandler<MdcinItem> implements Data24.ModelHandler
 {
   protected tableName: string = 'data24_raw_mdcin';
 

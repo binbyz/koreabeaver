@@ -1,4 +1,5 @@
 import MolitHandler from './handler/MolitHandler';
+import { Data24 } from '../../types';
 
 /**
  * 국토교통부 아파트매매 실거래 상세 자료
