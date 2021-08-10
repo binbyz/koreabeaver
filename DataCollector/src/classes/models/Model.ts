@@ -1,4 +1,4 @@
-import MysqlHandler from '../database/MysqlHandler';
+import MysqlHandler from 'mysql-eloquent';
 import { Data24 } from '../../types';
 import { logger } from '../../config/winston';
 import XMLParser from 'fast-xml-parser';

@@ -18,7 +18,9 @@
   },
   "dependencies": {
     "fast-xml-parser": "^3.19.0",
+    "mysql-eloquent": "^0.0.3-dev",
     "mysql2": "^2.2.5",
+    "slimphp": "^0.1.0",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.5"
   }
