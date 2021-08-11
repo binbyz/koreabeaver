@@ -15,6 +15,13 @@ export interface IndexSignature
   [index: string]: any // index signature
 }
 
+export interface Circuit
+{
+  boot: () => boolean;
+  prepare: () => boolean;
+  handle: () => boolean;
+}
+
 export namespace Collector
 {
   export enum Types

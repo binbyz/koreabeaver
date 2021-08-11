@@ -1,6 +1,8 @@
 import 'dotenv/config';
 
 import MdcinCollector from './classes/collector/MdcinCollector';
+import AptTradeCollector from './classes/collector/AptTradeCollector';
+
 import MdcinModel from './classes/models/MdcinModel';
 import CollectorHistory from './classes/models/CollectorHistory';
 
@@ -9,6 +11,7 @@ import { Collector } from './types';
 import { getLocaleDatetime } from './lib/slim';
 
 logger.info('Start DataCollector');
+
 main();
 
 /**
@@ -16,7 +19,8 @@ main();
  */
 function main()
 {
-  const collector = new MdcinCollector(process.env.MDCIN_ENCODING_KEY!);
+  const mdcinCollector = new MdcinCollector(process.env.MDCIN_ENCODING_KEY!);
+  const aptTradeCollector = new AptTradeCollector(process.env.APT_TRADE_ENCODING_KEY!);
 
   const historyModel = new CollectorHistory();
   const mdcinModel: MdcinModel = new MdcinModel();
@@ -30,11 +34,11 @@ function main()
       pageNo = historyOne?.extra_data?.last_page ? (historyOne.extra_data.last_page + 1) : 1;
     }
 
-    collector.setPageNo(pageNo);
-    collector.setNumOfRows(100);
+    mdcinCollector.setPageNo(pageNo);
+    mdcinCollector.setNumOfRows(100);
 
     // 응답 API 처리
-    await collector.call()
+    await mdcinCollector.call()
       .then(response => {
         // 응답값 처리
         mdcinModel.loadXML(response).handle();
