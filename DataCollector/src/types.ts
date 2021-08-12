@@ -15,11 +15,31 @@ export interface IndexSignature
   [index: string]: any // index signature
 }
 
-export interface Circuit
+export interface CircuitInterface
 {
-  boot: () => boolean;
+  /**
+   * step 1: boot
+   *
+   * Circuit를 실행하기 전 가장 첫 번째 논리 단위입니다.
+   * `true`시 `prepare` 단계로 넘어갑니다.
+   */
+  boot(): boolean;
+  /**
+   * step 2: prepare
+   *
+   * `true`시 `handle` 단계로 넘어갑니다.
+   */
   prepare: () => boolean;
+  /**
+   * step 3: handle
+   *
+   * 실제 작업이 실행되는 논리 단위의 공간입니다.
+   */
   handle: () => boolean;
+  /**
+   * handle() 처리 후 `false`값이 리턴되면 `except()`를 실행합니다.
+   */
+  except: () => void;
 }
 
 export namespace Collector
