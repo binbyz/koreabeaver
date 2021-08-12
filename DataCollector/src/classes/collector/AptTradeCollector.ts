@@ -9,21 +9,17 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
 {
   private static readonly encodingKey: string = process.env.APT_TRADE_ENCODING_KEY! || '';
   private static readonly decodingKey: string = process.env.APT_TRADE_DECODING_KEY! || '';
+
   private historyModel: CollectorHistory;
   private pageNo = 1;
   private readonly numOfRows = 1000;
 
-  private constructor(encodingKey: string, decodingKey: string | undefined = undefined)
+  public constructor()
   {
-    super(encodingKey, decodingKey)
+    super(AptTradeCollector.encodingKey, AptTradeCollector.decodingKey)
     super.setRequestUri(Data24.API_APT_TRADE + Data24.API_APT_TRADE)
 
     this.historyModel = new CollectorHistory();
-  }
-
-  public static getInstance(): AptTradeCollector
-  {
-    return new this(AptTradeCollector.encodingKey, AptTradeCollector.decodingKey);
   }
 
   public boot(): boolean

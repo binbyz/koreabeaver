@@ -10,21 +10,17 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
 {
   private static readonly encodingKey: string = process.env.MDCIN_ENCODING_KEY! || '';
   private static readonly decodingKey: string = process.env.MDCIN_DECODING_KEY! || '';
+
   private historyModel: CollectorHistory;
   private pageNo = 1;
   private readonly numOfRows = 100;
 
-  private constructor(encodingKey: string, decodingKey: string | undefined = undefined)
+  public constructor()
   {
-    super(encodingKey, decodingKey)
+    super(MdcinCollector.encodingKey, MdcinCollector.decodingKey);
     super.setRequestUri(Data24.API_MDCIN_HOST + Data24.API_MDCIN_URI)
 
     this.historyModel = new CollectorHistory();
-  }
-
-  public static getInstance(): MdcinCollector
-  {
-    return new this(MdcinCollector.encodingKey, MdcinCollector.decodingKey);
   }
 
   public boot(): boolean

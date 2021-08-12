@@ -18,7 +18,7 @@ export default class Circuit
   /**
    * Execute Circuit
    */
-  public static fire(circuits: Array<CircuitInterface>, ...args: any[]): boolean
+  public static fire(circuits: Array<CircuitInterface>, ...args: any[]): void
   {
     const executes: string[] = ['boot', 'prepare', 'handle', 'except'];
 
@@ -26,7 +26,7 @@ export default class Circuit
       for (let sort in executes) {
         let method = executes[sort];
 
-
+        console.log(circuit, method);
       }
     });
   }
