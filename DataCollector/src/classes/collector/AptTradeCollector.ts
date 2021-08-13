@@ -5,7 +5,7 @@ import CollectorHistory from '../models/CollectorHistory';
 /**
  * 국토교통부 아파트매매 실거래 상세 자료
  */
-export default class AptTradeCollector extends MolitHandler implements CircuitInterface
+export default class AptTradeCollector extends MolitHandler implements CircuitInterface.Bodies
 {
   private static readonly encodingKey: string = process.env.APT_TRADE_ENCODING_KEY! || '';
   private static readonly decodingKey: string = process.env.APT_TRADE_DECODING_KEY! || '';

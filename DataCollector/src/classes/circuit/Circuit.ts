@@ -1,5 +1,5 @@
 import { CircuitInterface } from "../../types";
-import MdcinCollector from "../collector/MdcinCollector";
+import { is_callable } from 'slimphp';
 
 /**
  * Circuit
@@ -18,15 +18,37 @@ export default class Circuit
   /**
    * Execute Circuit
    */
-  public static fire(circuits: Array<CircuitInterface>, ...args: any[]): void
+  public static fire(circuits: Array<CircuitInterface.Bodies>, ...args: any[]): void
   {
     const executes: string[] = ['boot', 'prepare', 'handle', 'except'];
 
     circuits.forEach(circuit => {
+      let result: boolean = false;
+
       for (let sort in executes) {
         let method = executes[sort];
 
-        console.log(circuit, method);
+        switch (method) {
+          case 'boot':
+            result = circuit.boot();
+            break;
+          case 'prepare':
+            if (result) {
+              result = circuit.prepare();
+            }
+            break;
+          case 'handle':
+            if (result) {
+              result = circuit.handle();
+            }
+            break;
+          case 'except':
+            if (!result) {
+              circuit.except();
+            }
+            break;
+          default:
+        }
       }
     });
   }

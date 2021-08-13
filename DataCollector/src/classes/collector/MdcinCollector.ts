@@ -6,7 +6,7 @@ import { is_null } from 'slimphp';
 /**
  * 의약품행정처분서비스
  */
-export default class MdcinCollector extends Data24Handler implements CircuitInterface
+export default class MdcinCollector extends Data24Handler implements CircuitInterface.Bodies
 {
   private static readonly encodingKey: string = process.env.MDCIN_ENCODING_KEY! || '';
   private static readonly decodingKey: string = process.env.MDCIN_DECODING_KEY! || '';
@@ -34,13 +34,13 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
   public prepare(): boolean
   {
     // 이전 히스토리 구하기
-    const historyOne = (async () => await this.historyModel.first())();
+    // const historyOne = (async () => await this.historyModel.first())();
 
-    if (is_null(historyOne)) {
-      this.pageNo = historyOne?.extra_data?.last_page ? (historyOne.extra_data.last_page + 1) : 1;
-    }
+    // if (is_null(historyOne)) {
+    //   this.pageNo = historyOne?.extra_data?.last_page ? (historyOne.extra_data.last_page + 1) : 1;
+    // }
 
-    this.setNumOfRows(this.numOfRows);
+    // this.setNumOfRows(this.numOfRows);
 
     return true;
   }
