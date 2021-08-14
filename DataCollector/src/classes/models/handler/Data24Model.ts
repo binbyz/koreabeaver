@@ -2,6 +2,9 @@ import ModelHandler from './ModelHandler';
 import { Data24 } from '../../../types';
 import { logger } from '../../../config/winston';
 
+/**
+ * @deprecated
+ */
 export default class Data24ModelHandler<T> extends ModelHandler<T>
 {
   protected primaryKey: string = 'id';

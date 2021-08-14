@@ -18,13 +18,10 @@ export default class RequestHandler
       port: parsedUri.port || protocol == 'https:' ? 443 : 80,
     };
 
-    logger.http(`Http Request: ${JSON.stringify(params)}`);
-
     return new Promise<string>((resolve, reject) => {
       const requested = request.request(params, response => {
         // rejected
         if (this.isNotValidStatusCode(response.statusCode)) {
-          logger.error(`Status Code: ${response.statusCode}: ${JSON.stringify(params)}`);
           return reject(new Error(`Status Code: ${response.statusCode}`));
         }
 

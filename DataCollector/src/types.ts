@@ -123,11 +123,6 @@ export namespace Data24
     throws: (error: Error) => void;
   }
 
-  export interface ModelHandler
-  {
-    handle: () => any;
-  }
-
   export interface ModelPageCounter extends IndexSignature
   {
     totalPage: number;

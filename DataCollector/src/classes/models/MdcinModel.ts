@@ -1,7 +1,7 @@
-import Data24ModelHandler from './handler/Data24Model';
-import { Data24, IndexSignature } from '../../types';
+import { IndexSignature } from '../../types';
+import MysqlEloquent from 'mysql-eloquent';
 
-interface MdcinItem extends IndexSignature
+export interface MdcinItem extends IndexSignature
 {
   ADM_DISPS_SEQ: number; // 행정처분일련번호
   ENTP_NAME: string; // 업소명
@@ -15,29 +15,14 @@ interface MdcinItem extends IndexSignature
   DISPS_TERM_DATE: string; // 행정처분기간
 }
 
-export default class MdcinModel extends Data24ModelHandler<MdcinItem> implements Data24.ModelHandler
+export default class MdcinModel extends MysqlEloquent<MdcinItem>
 {
+  protected databaseName: string = 'beaver';
+  protected primaryKey: string = 'id';
   protected tableName: string = 'data24_raw_mdcin';
 
   public constructor()
   {
     super();
-  }
-
-  /**
-   * handle
-   */
-  public async handle()
-  {
-    if (!this.isValidContent()) {
-      return false;
-    }
-
-    const items: Array<MdcinItem> = this.content.response.body.items.item;
-
-    // upsert massive
-    await this.upserts(items, 'ADM_DISPS_SEQ', ['ENTP_NAME', 'ADDR', 'ITEM_NAME']);
-
-    return true;
   }
 }

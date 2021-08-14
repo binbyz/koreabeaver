@@ -3,6 +3,9 @@ import { Data24 } from '../../../types';
 import { logger } from '../../../config/winston';
 import XMLParser from 'fast-xml-parser';
 
+/**
+ * @deprecated
+ */
 export default class ModelHandler<T> extends MysqlHandler<T> implements Data24.ModelInterface
 {
   protected contentType: Data24.ModelContents;

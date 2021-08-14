@@ -2,7 +2,8 @@ import Data24Handler from './handler/Data24Handler';
 import { Collector, CircuitInterface, Data24 } from '../../types';
 import CollectorHistory from '../models/CollectorHistory';
 import { is_null } from 'slimphp';
-import { CrawlerHistoryItem } from '../models/CollectorHistory';
+import { logger } from '../../config/winston';
+import { MdcinItem } from '../models/MdcinModel';
 
 /**
  * 의약품행정처분서비스
@@ -40,6 +41,10 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
     this.pageNo = r;
   }
 
+  /**
+   * 마지막 페이지 번호구하기
+   * @returns number
+   */
   private async getPageNo()
   {
     const historyOne = await this.historyModel.first();
@@ -54,7 +59,29 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
 
   public handle()
   {
-    console.log('handle', this.pageNo);
+    logger.info(`의약품행정처분 서비스를 호출합니다. (page: ${this.pageNo})`);
+    logger.info(this.getRequestUriWithParams());
+
+    // 실제 API 페이지를 호출합니다.
+    this.handleContents();
+  }
+
+  private async handleContents()
+  {
+    await this.call()
+      .then(response => {
+        this.loadXML(response)
+
+        if (!this.isValidContent()) {
+          throw new Error(`유효하지 않는 컨텐츠입니다.`);
+        }
+
+        const items: Array<MdcinItem> = this.content.response.body.items.item;
+
+        // upsert massive
+        await this.upserts(items, 'ADM_DISPS_SEQ', ['ENTP_NAME', 'ADDR', 'ITEM_NAME']);
+      })
+      .catch(e => logger.error(e.message));
   }
 
   public error()
