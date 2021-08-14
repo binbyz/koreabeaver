@@ -17,12 +17,13 @@ export interface IndexSignature
 
 export namespace CircuitInterface
 {
-  export type BootFunc = () => boolean;
-  export type PrepareFunc = () => boolean;
-  export type HandleFunc = () => boolean;
-  export type ExceptFunc = () => void;
+  export type BootFunc = () => void;
+  export type PrepareFunc = () => Promise<void>;
+  export type HandleFunc = () => void;
+  export type ErrorFunc = () => void;
+  export type AlwaysFunc = () => void;
 
-  export interface Bodies
+  export interface Bodies extends IndexSignature
   {
     /**
      * step 1: boot
@@ -46,7 +47,11 @@ export namespace CircuitInterface
     /**
      * handle() 처리 후 `false`값이 리턴되면 `except()`를 실행합니다.
      */
-    except: ExceptFunc;
+    error: ErrorFunc;
+    /**
+     * Circuit 실행 후 항상 실행됩니다.
+     */
+    always: AlwaysFunc;
   }
 }
 

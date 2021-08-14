@@ -1,4 +1,5 @@
-import 'dotenv/config';
+/* eslint-disable */
+require('dotenv').config({ path: "../.env" });
 
 import MdcinCollector from './classes/collector/MdcinCollector';
 import AptTradeCollector from './classes/collector/AptTradeCollector';
@@ -13,6 +14,20 @@ import { getLocaleDatetime } from './lib/slim';
 logger.info('Start DataCollector');
 
 main();
+// test();
+
+/**
+ * Test Function
+ */
+function test() {
+  console.log({
+    "database": process.env.MYSQL_DB_NAME!,
+    "host": process.env.MYSQL_HOST!,
+    "user": process.env.MYSQL_USER!,
+    "password": process.env.MYSQL_PASSWORD!,
+    "port": parseInt(process.env.MYSQL_PORT!, 10),
+  });
+}
 
 /**
  * Main Function

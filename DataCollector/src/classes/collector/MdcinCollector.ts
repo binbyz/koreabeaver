@@ -2,6 +2,7 @@ import Data24Handler from './handler/Data24Handler';
 import { Collector, CircuitInterface, Data24 } from '../../types';
 import CollectorHistory from '../models/CollectorHistory';
 import { is_null } from 'slimphp';
+import { CrawlerHistoryItem } from '../models/CollectorHistory';
 
 /**
  * 의약품행정처분서비스
@@ -23,34 +24,44 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
     this.historyModel = new CollectorHistory();
   }
 
-  public boot(): boolean
+  public boot()
   {
     // 이전 수집기 모델 히스토리
     this.historyModel.where('type', Collector.Types.DATA24_MDCIN).orderBy('id', 'desc');
-
-    return true;
   }
 
-  public prepare(): boolean
+  public async prepare(): Promise<void>
   {
-    // 이전 히스토리 구하기
-    // const historyOne = (async () => await this.historyModel.first())();
+    // 한 페이지 리스트 갯수
+    this.setNumOfRows(this.numOfRows);
 
-    // if (is_null(historyOne)) {
-    //   this.pageNo = historyOne?.extra_data?.last_page ? (historyOne.extra_data.last_page + 1) : 1;
-    // }
-
-    // this.setNumOfRows(this.numOfRows);
-
-    return true;
+    // 페이지 번호 구하기
+    let r = await this.getPageNo();
+    this.pageNo = r;
   }
 
-  public handle(): boolean
+  private async getPageNo()
   {
-    return false;
+    const historyOne = await this.historyModel.first();
+    let pageNo = 1;
+
+    if (!is_null(historyOne)) {
+      pageNo = historyOne?.extra_data?.last_page ? (historyOne.extra_data.last_page + 1) : 1;
+    }
+
+    return pageNo;
   }
 
-  public except(): void
+  public handle()
+  {
+    console.log('handle', this.pageNo);
+  }
+
+  public error()
+  {
+  }
+
+  public always()
   {
   }
 }

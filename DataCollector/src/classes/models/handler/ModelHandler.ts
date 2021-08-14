@@ -10,7 +10,14 @@ export default class ModelHandler<T> extends MysqlHandler<T> implements Data24.M
 
   public constructor()
   {
-    super();
+    super({
+      "database": process.env.MYSQL_DB_NAME!,
+      "host": process.env.MYSQL_HOST!,
+      "user": process.env.MYSQL_USER!,
+      "password": process.env.MYSQL_PASSWORD!,
+      "port": parseInt(process.env.MYSQL_PORT!, 10),
+    });
+
     this.contentType = Data24.ModelContentTypes.CONTENT;
   }
 
