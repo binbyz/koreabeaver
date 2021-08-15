@@ -28,15 +28,15 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
 
   public boot()
   {
+    // 한 페이지 리스트 갯수
+    this.setNumOfRows(this.numOfRows);
+
     // 이전 수집기 모델 히스토리
     this.historyModel.where('type', Collector.Types.DATA24_MDCIN).orderBy('id', 'desc');
   }
 
   public async prepare(): Promise<void>
   {
-    // 한 페이지 리스트 갯수
-    this.setNumOfRows(this.numOfRows);
-
     // 페이지 번호 구하기
     let r = await this.getPageNo();
     this.setPageNo(r);

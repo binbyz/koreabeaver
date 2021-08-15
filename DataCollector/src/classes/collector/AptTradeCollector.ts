@@ -11,7 +11,6 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
   private static readonly decodingKey: string = process.env.APT_TRADE_DECODING_KEY! || '';
 
   private historyModel: CollectorHistory;
-  private pageNo = 1;
   private readonly numOfRows = 1000;
 
   public constructor()
@@ -22,24 +21,29 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
     this.historyModel = new CollectorHistory();
   }
 
-  public boot(): boolean
+  public boot()
   {
-    this.historyModel.where('type', Collector.Types.APT_TRADE).orderBy('id', 'desc');
-    return true;
-  }
-
-  public prepare(): boolean
-  {
+    // 한 페지 리트 갯수
     this.setNumOfRows(this.numOfRows);
-    return true;
+
+    // 이전 수집기 모델 히스토리
+    this.historyModel.where('type', Collector.Types.APT_TRADE).orderBy('id', 'desc');
   }
 
-  public handle(): boolean
+  public async prepare(): Promise<void>
   {
-    return false;
+  }
+
+  public handle()
+  {
   }
 
   public except(): void
   {
+  }
+
+  public always()
+  {
+    this.historyModel.clear();
   }
 }
