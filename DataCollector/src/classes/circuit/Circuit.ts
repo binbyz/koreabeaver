@@ -1,4 +1,5 @@
 import { CircuitInterface } from "../../types";
+import CircuitErrorException from "../exceptions/CircuitErrorException";
 
 /**
  * Circuit
@@ -19,7 +20,7 @@ export default class Circuit
    */
   public static fire(circuits: Array<CircuitInterface.Bodies>, ...args: any[]): void
   {
-    const executes: string[] = ['boot', 'prepare', 'handle', 'except'];
+    const executes: string[] = ['boot', 'prepare', 'handle'];
 
     circuits.forEach(async circuit => {
       for (let sort in executes) {
@@ -28,7 +29,7 @@ export default class Circuit
         try {
           await circuit[method]();
         } catch (e) {
-          circuit.error();
+          throw new CircuitErrorException(e.stack);
         }
       }
 

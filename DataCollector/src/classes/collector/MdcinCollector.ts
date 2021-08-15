@@ -3,7 +3,7 @@ import { Collector, CircuitInterface, Data24 } from '../../types';
 import CollectorHistory from '../models/CollectorHistory';
 import { is_null } from 'slimphp';
 import { logger } from '../../config/winston';
-import { MdcinItem } from '../models/MdcinModel';
+import MdcinModel, { MdcinItem } from '../models/MdcinModel';
 
 /**
  * 의약품행정처분서비스
@@ -13,8 +13,8 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
   private static readonly encodingKey: string = process.env.MDCIN_ENCODING_KEY! || '';
   private static readonly decodingKey: string = process.env.MDCIN_DECODING_KEY! || '';
 
+  private mdcinModel: MdcinModel;
   private historyModel: CollectorHistory;
-  private pageNo = 1;
   private readonly numOfRows = 100;
 
   public constructor()
@@ -22,6 +22,7 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
     super(MdcinCollector.encodingKey, MdcinCollector.decodingKey);
     super.setRequestUri(Data24.API_MDCIN_HOST + Data24.API_MDCIN_URI)
 
+    this.mdcinModel = new MdcinModel();
     this.historyModel = new CollectorHistory();
   }
 
@@ -38,7 +39,7 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
 
     // 페이지 번호 구하기
     let r = await this.getPageNo();
-    this.pageNo = r;
+    this.setPageNo(r);
   }
 
   /**
@@ -59,7 +60,7 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
 
   public handle()
   {
-    logger.info(`의약품행정처분 서비스를 호출합니다. (page: ${this.pageNo})`);
+    logger.info(`의약품행정처분 서비스를 호출합니다. (requestParams: ${JSON.stringify(this.requestParams)})`);
     logger.info(this.getRequestUriWithParams());
 
     // 실제 API 페이지를 호출합니다.
@@ -69,8 +70,8 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
   private async handleContents()
   {
     await this.call()
-      .then(response => {
-        this.loadXML(response)
+      .then(async response => {
+        this.loadXML(response);
 
         if (!this.isValidContent()) {
           throw new Error(`유효하지 않는 컨텐츠입니다.`);
@@ -79,16 +80,14 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
         const items: Array<MdcinItem> = this.content.response.body.items.item;
 
         // upsert massive
-        await this.upserts(items, 'ADM_DISPS_SEQ', ['ENTP_NAME', 'ADDR', 'ITEM_NAME']);
+        await this.mdcinModel.upserts(items, 'ADM_DISPS_SEQ', ['ENTP_NAME', 'ADDR', 'ITEM_NAME']);
       })
-      .catch(e => logger.error(e.message));
-  }
-
-  public error()
-  {
+      .catch(e => logger.error(e.stack));
   }
 
   public always()
   {
+    this.historyModel.clear();
+    this.mdcinModel.clear();
   }
 }

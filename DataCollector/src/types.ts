@@ -20,7 +20,7 @@ export namespace CircuitInterface
   export type BootFunc = () => void;
   export type PrepareFunc = () => Promise<void>;
   export type HandleFunc = () => void;
-  export type ErrorFunc = () => void;
+  // export type ErrorFunc = () => void;
   export type AlwaysFunc = () => void;
 
   export interface Bodies extends IndexSignature
@@ -47,7 +47,7 @@ export namespace CircuitInterface
     /**
      * handle() 처리 후 `false`값이 리턴되면 `except()`를 실행합니다.
      */
-    error: ErrorFunc;
+    // error: ErrorFunc;
     /**
      * Circuit 실행 후 항상 실행됩니다.
      */
