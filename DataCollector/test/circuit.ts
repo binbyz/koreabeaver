@@ -8,6 +8,7 @@ import AptTradeCollector from "../src/classes/collector/AptTradeCollector";
 main();
 
 function main() {
-  Circuit.fire([new MdcinCollector()]);
+  // Circuit.fire([new MdcinCollector()]);
   // Circuit.fire([new MdcinCollector(), new AptTradeCollector()]);
+  Circuit.fire([new AptTradeCollector()]);
 }

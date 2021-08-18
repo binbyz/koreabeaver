@@ -10,6 +10,8 @@ export default class MolitHandler extends Data24Handler implements Data24.Data24
     this.requestParams = {
       "numOfRows": 1,
       "pageNo": 1,
+      "LAWD_CD": null,
+      "DEAL_YMD": null,
       "ServiceKey": this.encodingKey,
     };
   }
@@ -20,7 +22,7 @@ export default class MolitHandler extends Data24Handler implements Data24.Data24
    */
   public setLawdCd(code: string): void
   {
-
+    this.requestParams.LAWD_CD = code.trim();
   }
 
   /**
@@ -29,6 +31,6 @@ export default class MolitHandler extends Data24Handler implements Data24.Data24
    */
   public setDealYmd(ymd: string): void
   {
-
+    this.requestParams.DEAL_YMD = ymd.trim();
   }
 }

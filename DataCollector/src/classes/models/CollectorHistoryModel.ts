@@ -7,7 +7,7 @@ export interface CrawlerHistoryItem extends IndexSignature
   extra_data: object;
 }
 
-export default class CollectorHistory extends MysqlEloquent<CrawlerHistoryItem>
+export default class CollectorHistoryModel extends MysqlEloquent<CrawlerHistoryItem>
 {
   protected databaseName: string = 'beaver';
   protected primaryKey: string = 'id';

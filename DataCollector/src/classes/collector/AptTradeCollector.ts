@@ -1,6 +1,9 @@
 import MolitHandler from './handler/MolitHandler';
 import { CircuitInterface, Data24, Collector } from '../../types';
-import CollectorHistory from '../models/CollectorHistory';
+import CollectorHistoryModel from '../models/CollectorHistoryModel';
+import { CityCodeType, Cities } from '../models/LawdCdModel';
+import { is_null, date } from 'slimphp';
+import { logger } from '../../config/winston';
 
 /**
  * 국토교통부 아파트매매 실거래 상세 자료
@@ -10,15 +13,18 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
   private static readonly encodingKey: string = process.env.APT_TRADE_ENCODING_KEY! || '';
   private static readonly decodingKey: string = process.env.APT_TRADE_DECODING_KEY! || '';
 
-  private historyModel: CollectorHistory;
+  private historyModel: CollectorHistoryModel;
   private readonly numOfRows = 1000;
+  private readonly sampleDealYmd = date('Ym');
+  private targetCities: string[] = [];
+  private pageNumberMap = new Map<CityCodeType, number>();
 
   public constructor()
   {
     super(AptTradeCollector.encodingKey, AptTradeCollector.decodingKey)
     super.setRequestUri(Data24.API_APT_TRADE + Data24.API_APT_TRADE)
 
-    this.historyModel = new CollectorHistory();
+    this.historyModel = new CollectorHistoryModel();
   }
 
   public boot()
@@ -28,14 +34,55 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
 
     // 이전 수집기 모델 히스토리
     this.historyModel.where('type', Collector.Types.APT_TRADE).orderBy('id', 'desc');
+
+    // 수집 도시들 타겟을 설정합니다.
+    this.targetCities = [
+      Cities.SEOUL_GEUMCHUN,
+      Cities.SEOUL_YONGSAN,
+    ];
   }
 
   public async prepare(): Promise<void>
   {
+    this.getPageNoGroupByCityCode();
+  }
+
+  /**
+   * 도시코드별 마지막 페이지 번호를 구합니다.
+   */
+  private async getPageNoGroupByCityCode()
+  {
+    const collectorHistory = await this.historyModel.first();
+
+    if (!is_null(collectorHistory)) {
+      for (let idx in collectorHistory.extra_data.last_page) {
+        let history = collectorHistory.extra_data.last_page[idx];
+
+        // 지역코드별 이전 히스토리 캐시
+        this.pageNumberMap.set(history.city_code, history.last_page);
+      }
+    }
   }
 
   public handle()
   {
+    this.targetCities.forEach(cityCode => {
+      // 지역 코드 설정
+      this.setLawdCd(cityCode);
+
+      // 샘플 수집 데이터 설정
+      this.setDealYmd(this.sampleDealYmd);
+
+      // 마지막 페이지 설정
+      if (this.pageNumberMap.has(cityCode)) {
+        this.setPageNo(this.pageNumberMap.get(cityCode)!);
+      } else {
+        this.setPageNo(1);
+      }
+
+      logger.info(`국토교통부 아파트매매 실거래 상세 자료를 호출합니다. (requestParams: ${JSON.stringify(this.requestParams)})`);
+      logger.info(this.getRequestUriWithParams());
+    });
   }
 
   public except(): void

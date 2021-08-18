@@ -1,6 +1,6 @@
 import Data24Handler from './handler/Data24Handler';
 import { Collector, CircuitInterface, Data24 } from '../../types';
-import CollectorHistory from '../models/CollectorHistory';
+import CollectorHistoryModel from '../models/CollectorHistoryModel';
 import { is_null } from 'slimphp';
 import { logger } from '../../config/winston';
 import MdcinModel, { MdcinItem } from '../models/MdcinModel';
@@ -14,7 +14,7 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
   private static readonly decodingKey: string = process.env.MDCIN_DECODING_KEY! || '';
 
   private mdcinModel: MdcinModel;
-  private historyModel: CollectorHistory;
+  private historyModel: CollectorHistoryModel;
   private readonly numOfRows = 100;
 
   public constructor()
@@ -23,7 +23,7 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
     super.setRequestUri(Data24.API_MDCIN_HOST + Data24.API_MDCIN_URI)
 
     this.mdcinModel = new MdcinModel();
-    this.historyModel = new CollectorHistory();
+    this.historyModel = new CollectorHistoryModel();
   }
 
   public boot()
@@ -37,8 +37,8 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
 
   public async prepare(): Promise<void>
   {
-    // 페이지 번호 구하기
     let r = await this.getPageNo();
+
     this.setPageNo(r);
   }
 
@@ -48,11 +48,11 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
    */
   private async getPageNo()
   {
-    const historyOne = await this.historyModel.first();
+    const collectorHistory = await this.historyModel.first();
     let pageNo = 1;
 
-    if (!is_null(historyOne)) {
-      pageNo = historyOne?.extra_data?.last_page ? (historyOne.extra_data.last_page + 1) : 1;
+    if (!is_null(collectorHistory)) {
+      pageNo = collectorHistory.extra_data.last_page + 1;
     }
 
     return pageNo;
@@ -81,6 +81,8 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
 
         // upsert massive
         await this.mdcinModel.upserts(items, 'ADM_DISPS_SEQ', ['ENTP_NAME', 'ADDR', 'ITEM_NAME']);
+
+        // TODO last_page 업데이트 하기
       })
       .catch(e => logger.error(e.stack));
   }
