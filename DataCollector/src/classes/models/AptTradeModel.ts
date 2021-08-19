@@ -1,6 +1,35 @@
 import { IndexSignature } from '../../types';
 import MysqlEloquent from 'mysql-eloquent';
 
+export const keyNameExchanger = {
+  "일련번호": "serial_number",
+  "아파트": "apartment_name",
+  "거래금액": "deal_amount",
+  "건축년도": "build_year",
+  "년": "deal_year", // 계약년도
+  "월": "deal_month", // 계약월
+  "일": "deal_day", // 계약일
+  "층": "floor",
+  "도로명": "road_name",
+  "도로명건물본번코드": "road_name_bonbun",
+  "도로명건물부번호코드": "road_name_bubun",
+  "도로명시군구코드": "road_name_sigungu_code",
+  "도로명일련번호코드": "road_name_seq",
+  "도로명지상지하코드": "road_name_basement_code",
+  "도로명코드": "road_name_code",
+  "법정동지번코드": "land_code",
+  "법정동": "dong",
+  "법정동본번코드": "bonbun",
+  "법정동부번코드": "bubun",
+  "지번": "jibun",
+  "법정동시군구코드": "sigungu_code",
+  "법정동읍면동코드": "eubmyundong_code",
+  "전용면적": "area_for_exclusive_use",
+  "지역코드": "regional_code",
+  "해제여부": "cancel_deal_type",
+  "해제사유발생일": "cancel_deal_day",
+};
+
 export interface AptTradeItem extends IndexSignature
 {
   serial_number: string; // 일련번호 (PK)
@@ -20,7 +49,7 @@ export interface AptTradeItem extends IndexSignature
   road_name_code: string; // 도로명코드
   land_code: string; // 법정동지번코드
   dong: string; // 법정동
-  bonbun: string; // 법정동돈번코드
+  bonbun: string; // 법정동본번코드
   bubun: string; // 벙정동부번코드
   jibun: number; // 지번
   sigungu_code: string; // 대상물건의 시군구코드
