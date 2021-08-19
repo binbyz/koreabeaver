@@ -25,8 +25,8 @@ CREATE TABLE `collector_history` (
 CREATE TABLE `molit_raw_apt_trade` (
   `serial_number` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '일련번호',
   `apartment_name` varchar(300) DEFAULT NULL COMMENT '아파트명',
-  `deal_amount` int NOT NULL COMMENT '거래금액',
   `build_year` int NOT NULL COMMENT '건축년도',
+  `deal_amount` int NOT NULL COMMENT '거래금액',
   `deal_year` int NOT NULL COMMENT '계약년도',
   `deal_month` int DEFAULT NULL COMMENT '계약월',
   `deal_day` int DEFAULT NULL COMMENT '계약일',

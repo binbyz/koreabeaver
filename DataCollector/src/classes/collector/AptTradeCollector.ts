@@ -2,7 +2,8 @@ import MolitHandler from './handler/MolitHandler';
 import { CircuitInterface, Data24, Collector } from '../../types';
 import CollectorHistoryModel from '../models/CollectorHistoryModel';
 import { CityCodeType, Cities } from '../models/LawdCdModel';
-import { is_null, date } from 'slimphp';
+import AptTradeModel, { AptKeyNameExchanger, AptTradeItem } from '../models/AptTradeModel';
+import { is_undefined, is_null, date } from 'slimphp';
 import { logger } from '../../config/winston';
 
 /**
@@ -14,6 +15,7 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
   private static readonly decodingKey: string = process.env.APT_TRADE_DECODING_KEY! || '';
 
   private historyModel: CollectorHistoryModel;
+  private aptTradeModel: AptTradeModel;
   private readonly numOfRows = 1000;
   private readonly sampleDealYmd = date('Ym');
   private targetCities: string[] = [];
@@ -25,6 +27,7 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
     super.setRequestUri(Data24.API_APT_TRADE + Data24.API_APT_TRADE_URI)
 
     this.historyModel = new CollectorHistoryModel();
+    this.aptTradeModel = new AptTradeModel();
   }
 
   public boot()
@@ -38,7 +41,7 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
     // 수집 도시들 타겟을 설정합니다.
     this.targetCities = [
       Cities.SEOUL_GEUMCHUN,
-      Cities.SEOUL_YONGSAN,
+      // Cities.SEOUL_YONGSAN,
     ];
   }
 
@@ -90,10 +93,35 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
           // 데이터 유효성 검사
           this.isValidContent();
 
-          console.log(response);
+          // 데이터 영문 데이터로 변환
+          const converted: Array<AptTradeItem> = this.convertAptTradeItems(this.content.response.body.items.item);
+          console.log(converted);
+
+          // upsert massive
+          await this.aptTradeModel.upserts(converted, 'serial_number', ['deal_amount', 'deal_year', 'deal_month', 'deal_day']);
         })
         .catch (e => logger.error(e.stack));
     });
+  }
+
+  private convertAptTradeItems(items: []): Array<AptTradeItem>
+  {
+    const result: Array<AptTradeItem> = [];
+
+    items.forEach(itemKr => {
+      let row: Partial<AptTradeItem> = {};
+
+      for (let keyNameKr in itemKr as object) {
+        let keyNameEn = AptKeyNameExchanger[keyNameKr];
+        let value: any = itemKr[keyNameKr];
+
+        row[keyNameEn] = AptTradeModel.typeCasting(keyNameEn, value);
+      }
+
+      result.push(row as AptTradeItem);
+    });
+
+    return result;
   }
 
   public except(): void

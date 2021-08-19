@@ -1,7 +1,7 @@
 import { IndexSignature } from '../../types';
 import MysqlEloquent from 'mysql-eloquent';
 
-export const keyNameExchanger = {
+export const AptKeyNameExchanger: { [k: string]: string } = {
   "일련번호": "serial_number",
   "아파트": "apartment_name",
   "거래금액": "deal_amount",
@@ -11,7 +11,7 @@ export const keyNameExchanger = {
   "일": "deal_day", // 계약일
   "층": "floor",
   "도로명": "road_name",
-  "도로명건물본번코드": "road_name_bonbun",
+  "도로명건물본번호코드": "road_name_bonbun",
   "도로명건물부번호코드": "road_name_bubun",
   "도로명시군구코드": "road_name_sigungu_code",
   "도로명일련번호코드": "road_name_seq",
@@ -69,5 +69,49 @@ export default class AptTradeModel extends MysqlEloquent<AptTradeItem>
   public constructor()
   {
     super();
+  }
+
+  public static typeCasting(key: string, value: any): string | number
+  {
+    switch (key) {
+      case 'deal_amount': // 거래금액 변환
+        value = parseInt(String(value).replace(/\./g, ''), 10);
+        break;
+      case 'serial_number':
+      case 'apartment_name':
+      case 'floor':
+      case 'road_name':
+      case 'road_name_bonbun':
+      case 'road_name_bubun':
+      case 'road_name_sigungu_code':
+      case 'road_name_basement_code':
+      case 'road_name_code':
+      case 'land_code':
+      case 'dong':
+      case 'bonbun':
+      case 'bubun':
+      case 'sigungu_code':
+      case 'eubmyundong_code':
+      case 'regional_code':
+      case 'cancel_deal_day':
+        value = String(value).toString().trim();
+        break;
+      case 'deal_amount':
+      case 'build_year':
+      case 'deal_year':
+      case 'deal_month':
+      case 'deal_day':
+      case 'road_name_seq':
+      case 'jibun':
+      case 'area_for_exclusive_use':
+        value = parseInt(value, 10);
+        break;
+      case 'cancel_deal_type':
+        value = (!!value) ? 1 : 0;
+        break;
+      default:
+    }
+
+    return value;
   }
 }
