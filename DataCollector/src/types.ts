@@ -17,11 +17,10 @@ export interface IndexSignature
 
 export namespace CircuitInterface
 {
-  export type BootFunc = () => void;
-  export type PrepareFunc = () => Promise<void>;
-  export type HandleFunc = () => void;
-  // export type ErrorFunc = () => void;
-  export type AlwaysFunc = () => void;
+  export type BootFn = () => void;
+  export type PrepareFn = () => Promise<void>;
+  export type HandleFn = () => void;
+  export type AlwaysFn = () => void;
 
   export interface Bodies extends IndexSignature
   {
@@ -31,27 +30,23 @@ export namespace CircuitInterface
      * Circuit를 실행하기 전 가장 첫 번째 논리 단위입니다.
      * `true`시 `prepare` 단계로 넘어갑니다.
      */
-    boot: BootFunc;
+    boot: BootFn;
     /**
      * step 2: prepare
      *
      * `true`시 `handle` 단계로 넘어갑니다.
      */
-    prepare: PrepareFunc;
+    prepare: PrepareFn;
     /**
      * step 3: handle
      *
      * 실제 작업이 실행되는 논리 단위의 공간입니다.
      */
-    handle: HandleFunc;
-    /**
-     * handle() 처리 후 `false`값이 리턴되면 `except()`를 실행합니다.
-     */
-    // error: ErrorFunc;
+    handle: HandleFn;
     /**
      * Circuit 실행 후 항상 실행됩니다.
      */
-    always: AlwaysFunc;
+    always: AlwaysFn;
   }
 }
 

@@ -22,7 +22,7 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
   public constructor()
   {
     super(AptTradeCollector.encodingKey, AptTradeCollector.decodingKey)
-    super.setRequestUri(Data24.API_APT_TRADE + Data24.API_APT_TRADE)
+    super.setRequestUri(Data24.API_APT_TRADE + Data24.API_APT_TRADE_URI)
 
     this.historyModel = new CollectorHistoryModel();
   }
@@ -66,9 +66,9 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
 
   public handle()
   {
-    this.targetCities.forEach(cityCode => {
+    this.targetCities.forEach(async cityCode => {
       // 지역 코드 설정
-      this.setLawdCd(cityCode);
+      this.setLawdCd(cityCode.substr(0, 5));
 
       // 샘플 수집 데이터 설정
       this.setDealYmd(this.sampleDealYmd);
@@ -82,6 +82,17 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
 
       logger.info(`국토교통부 아파트매매 실거래 상세 자료를 호출합니다. (requestParams: ${JSON.stringify(this.requestParams)})`);
       logger.info(this.getRequestUriWithParams());
+
+      await this.call()
+        .then(async response => {
+          this.loadXML(response);
+
+          // 데이터 유효성 검사
+          this.isValidContent();
+
+          console.log(response);
+        })
+        .catch (e => logger.error(e.stack));
     });
   }
 
