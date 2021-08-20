@@ -23,11 +23,13 @@ CREATE TABLE `collector_history` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `molit_raw_apt_trade` (
-  `serial_number` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '일련번호',
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `uuid` varchar(100) NOT NULL COMMENT '고유 유니크 아이디',
+  `serial_number` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '일련번호',
   `apartment_name` varchar(300) DEFAULT NULL COMMENT '아파트명',
-  `build_year` int NOT NULL COMMENT '건축년도',
-  `deal_amount` int NOT NULL COMMENT '거래금액',
-  `deal_year` int NOT NULL COMMENT '계약년도',
+  `build_year` int DEFAULT NULL COMMENT '건축년도',
+  `deal_amount` int DEFAULT NULL COMMENT '거래금액',
+  `deal_year` int DEFAULT NULL COMMENT '계약년도',
   `deal_month` int DEFAULT NULL COMMENT '계약월',
   `deal_day` int DEFAULT NULL COMMENT '계약일',
   `floor` varchar(10) DEFAULT NULL COMMENT '층수',
@@ -49,5 +51,6 @@ CREATE TABLE `molit_raw_apt_trade` (
   `regional_code` varchar(300) DEFAULT NULL COMMENT '지역코드',
   `cancel_deal_type` tinyint unsigned DEFAULT NULL COMMENT '해제여부',
   `cancel_deal_day` varchar(300) DEFAULT NULL COMMENT '해제사유발생일',
-  PRIMARY KEY (`serial_number`)
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `uq_uuid` (`uuid`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
