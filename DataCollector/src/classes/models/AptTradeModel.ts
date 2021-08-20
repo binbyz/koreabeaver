@@ -1,5 +1,6 @@
 import { IndexSignature } from '../../types';
 import MysqlEloquent from 'mysql-eloquent';
+import { sprintf } from 'slimphp';
 
 export const AptKeyNameExchanger: { [k: string]: string } = {
   "일련번호": "serial_number",
@@ -69,6 +70,24 @@ export default class AptTradeModel extends MysqlEloquent<AptTradeItem>
   public constructor()
   {
     super();
+  }
+
+  /**
+   * 한 행을 구분할 수 있는 유니크 아이디를 반환합니다.
+   */
+  public static makeUUID(item: AptTradeItem): string
+  {
+    return sprintf(
+      '%s-%s-%s-%s-%s-%s-%s-%s',
+      `${item.deal_year}${item.deal_month}${item.deal_day}`,
+      item.regional_code,
+      item.sigungu_code,
+      item.eubmyundong_code,
+      item.bonbun,
+      item.bubun,
+      item.jibun,
+      item.floor
+    );
   }
 
   public static typeCasting(key: string, value: any): string | number

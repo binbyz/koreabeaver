@@ -95,10 +95,11 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
 
           // 데이터 영문 데이터로 변환
           const converted: Array<AptTradeItem> = this.convertAptTradeItems(this.content.response.body.items.item);
+
           console.log(converted);
 
           // upsert massive
-          await this.aptTradeModel.upserts(converted, 'serial_number', ['deal_amount', 'deal_year', 'deal_month', 'deal_day']);
+          await this.aptTradeModel.upserts(converted, 'uuid', ['deal_amount']);
         })
         .catch (e => logger.error(e.stack));
     });
@@ -109,7 +110,7 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
     const result: Array<AptTradeItem> = [];
 
     items.forEach(itemKr => {
-      let row: Partial<AptTradeItem> = {};
+      let row = <AptTradeItem>{};
 
       for (let keyNameKr in itemKr as object) {
         let keyNameEn = AptKeyNameExchanger[keyNameKr];
@@ -118,7 +119,10 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
         row[keyNameEn] = AptTradeModel.typeCasting(keyNameEn, value);
       }
 
-      result.push(row as AptTradeItem);
+      // make `uuid`
+      row['uuid'] = AptTradeModel.makeUUID(row);
+
+      result.push(row);
     });
 
     return result;
