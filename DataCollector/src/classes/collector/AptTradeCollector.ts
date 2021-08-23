@@ -114,8 +114,8 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
           // await this.aptTradeModel.upserts(converted, 'uuid', ['deal_amount']);
 
           // 마지막 히스토리 저장
-          this.updateLastHistory(
-            this.calcUpdateHistory(
+          this.updateHistory(
+            this.getUpdateHistory(
               {
                 "city_code": cityCode,
                 "date": dealYmd,
@@ -162,7 +162,7 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
   /**
    * 업데이트시킬 히스토리 아이템을 반환합니다.
    */
-  private calcUpdateHistory(item: LastPageItem, itemCount: number): LastPageItem[]
+  private getUpdateHistory(item: LastPageItem, itemCount: number): LastPageItem[]
   {
     const without = this.hModel.extra_data.last_page.filter(r => item.city_code != r.city_code);
 
@@ -179,10 +179,7 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
     return without;
   }
 
-  /**
-   * 히스토리 객체에서 수집된 `cityCode`만 찾아 바로 업데이트 합니다.
-   */
-  private updateLastHistory(updater: LastPageItem[]): void
+  private updateHistory(updater: LastPageItem[]): void
   {
   }
 
