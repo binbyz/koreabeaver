@@ -95,7 +95,6 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
 
           // 데이터 영문 데이터로 변환
           const converted: Array<AptTradeItem> = this.convertAptTradeItems(this.content.response.body.items.item);
-
           console.log(converted);
 
           // upsert massive
@@ -107,7 +106,7 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
 
   private convertAptTradeItems(items: []): Array<AptTradeItem>
   {
-    const result: Array<AptTradeItem> = [];
+    let result: Array<AptTradeItem> = [];
 
     items.forEach(itemKr => {
       let row = <AptTradeItem>{};
@@ -122,8 +121,15 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
       // make `uuid`
       row['uuid'] = AptTradeModel.makeUUID(row);
 
+      // push
       result.push(row);
     });
+
+    // 필요한 필드가 할당이 되어 있는지 체크, 없으면 필드 할당
+    result = AptTradeModel.fillNecessaryFields(result);
+
+    // 필드들의 순서를 유지시킵니다.
+    result = AptTradeModel.keepSafeFieldOrder(result);
 
     return result;
   }

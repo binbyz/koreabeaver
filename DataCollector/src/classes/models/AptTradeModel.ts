@@ -33,7 +33,7 @@ export const AptKeyNameExchanger: { [k: string]: string } = {
 
 export interface AptTradeItem extends IndexSignature
 {
-  serial_number: string; // 일련번호 (PK)
+  serial_number: string; // 일련번호
   apartment_name: string; // 아파트명
   deal_amount: number; // 거래금액 (`,` 제거)
   build_year: number; // 건축년도
@@ -90,6 +90,74 @@ export default class AptTradeModel extends MysqlEloquent<AptTradeItem>
     );
   }
 
+  /**
+   * `API` 상에서 빠진 필드를 찾아 채워넣습니다.
+   */
+  public static fillNecessaryFields(items: AptTradeItem[]): AptTradeItem[]
+  {
+    const neccessaryFields: string[] = ['serial_number'];
+
+    items.forEach((item, idx) => {
+      neccessaryFields.forEach(field => {
+        if (!(field in item)) {
+          items[idx][field] = AptTradeModel.typeCasting(field, '');
+        }
+      });
+    });
+
+    return items;
+  }
+
+  /**
+   * 필드의 순서를 고정시키기 위해 사용됩니다.
+   * `upserts` 같은 쿼리에서는 오브젝트의 `key` 순서가 중요시 됩니다.
+   */
+  public static keepSafeFieldOrder(items: AptTradeItem[]): AptTradeItem[]
+  {
+    let result: AptTradeItem[] = [];
+    const keep: Array<keyof AptTradeItem> = [
+      'uuid', // 해당 키는 테이블에만 존재하는 커스텀 `uuid`
+      'serial_number',
+      'apartment_name',
+      'deal_amount',
+      'build_year',
+      'deal_year',
+      'deal_month',
+      'deal_day',
+      'floor',
+      'road_name',
+      'road_name_bonbun',
+      'road_name_bubun',
+      'road_name_sigungu_code',
+      'road_name_seq',
+      'road_name_basement_code',
+      'road_name_code',
+      'land_code',
+      'dong',
+      'bonbun',
+      'bubun',
+      'jibun',
+      'sigungu_code',
+      'eubmyundong_code',
+      'area_for_exclusive_use',
+      'regional_code',
+      'cancel_deal_type',
+      'cancel_deal_day',
+    ];
+
+    items.forEach(item => {
+      let copy = <AptTradeItem>{};
+
+      keep.forEach(keepf => {
+        copy[keepf] = item[keepf];
+      });
+
+      result.push(copy);
+    });
+
+    return result;
+  }
+
   public static typeCasting(key: string, value: any): string | number
   {
     switch (key) {
@@ -98,7 +166,6 @@ export default class AptTradeModel extends MysqlEloquent<AptTradeItem>
         break;
       case 'serial_number':
       case 'apartment_name':
-      case 'floor':
       case 'road_name':
       case 'road_name_bonbun':
       case 'road_name_bubun':
@@ -124,6 +191,13 @@ export default class AptTradeModel extends MysqlEloquent<AptTradeItem>
       case 'jibun':
       case 'area_for_exclusive_use':
         value = parseInt(value, 10);
+        break;
+      case 'floor':
+        value = parseInt(value, 10);
+
+        if (!value) {
+          value = null;
+        }
         break;
       case 'cancel_deal_type':
         value = (!!value) ? 1 : 0;
