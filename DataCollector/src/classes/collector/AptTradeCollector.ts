@@ -3,7 +3,7 @@ import { CircuitInterface, Data24, Collector } from '../../types';
 import CollectorHistoryModel from '../models/CollectorHistoryModel';
 import { CityCodeType, Cities } from '../models/LawdCdModel';
 import AptTradeModel, { AptKeyNameExchanger, AptTradeItem } from '../models/AptTradeModel';
-import { is_undefined, is_null, date } from 'slimphp';
+import { is_null, date } from 'slimphp';
 import { logger } from '../../config/winston';
 
 /**
@@ -95,7 +95,6 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
 
           // 데이터 영문 데이터로 변환
           const converted: Array<AptTradeItem> = this.convertAptTradeItems(this.content.response.body.items.item);
-          console.log(converted);
 
           // upsert massive
           await this.aptTradeModel.upserts(converted, 'uuid', ['deal_amount']);
