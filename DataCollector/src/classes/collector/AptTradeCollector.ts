@@ -18,6 +18,7 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
   private historyModel: CollectorHistoryModel;
   private aptTradeModel: AptTradeModel;
   private readonly numOfRows = 500;
+  private readonly crawlStartDate = '201501';
   private targetCities: string[] = [];
 
   private hModel: CrawlerHistoryItem = {
@@ -75,7 +76,7 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
         this.hPageNumberMap.set(history.city_code!, !is_undefined(history.last_page) ? history.last_page : 1);
 
         // 지역코드별 이전 마지막 검색날짜 캐시
-        this.hDateMap.set(history.city_code!, !is_undefined(history.date) ? history.date : date('Ym'));
+        this.hDateMap.set(history.city_code!, !is_undefined(history.date) ? history.date : this.crawlStartDate);
       }
     } else {
       throw new Error(`히스토리가 설정돼 있지 않습니다. (Collector.Types: ${Collector.Types.APT_TRADE})`);
@@ -85,7 +86,7 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
   public handle()
   {
     this.targetCities.forEach(async cityCode => {
-      const dealYmd = this.hDateMap.has(cityCode) ? this.hDateMap.get(cityCode)! : date('Ym');
+      const dealYmd = this.hDateMap.has(cityCode) ? this.hDateMap.get(cityCode)! : this.crawlStartDate;
       const pageNo = this.hPageNumberMap.has(cityCode) ? this.hPageNumberMap.get(cityCode)! : 1;
 
       // 지역 코드 설정
@@ -111,7 +112,7 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
           const converted: Array<AptTradeItem> = this.convertAptTradeItems(this.content.response.body.items.item);
 
           // upsert massive
-          // await this.aptTradeModel.upserts(converted, 'uuid', ['deal_amount']);
+          await this.aptTradeModel.upserts(converted, 'uuid', ['deal_amount']);
 
           // 마지막 히스토리 저장
           this.updateHistory(
@@ -168,6 +169,8 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
 
     if (itemCount < this.numOfRows) {
       item.page = 1;
+
+      // 마지막 페이지면 다음달 날짜를 입력합니다.
       item.date = moment(item.date).add(1, 'months').format('YYYYMM');
     } else {
       item.page++;
@@ -179,8 +182,18 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
     return without;
   }
 
+  /**
+   * 히스토리 업데이트
+   */
   private updateHistory(updater: LastPageItem[]): void
   {
+    this.historyModel.clear();
+    this.historyModel.where('type', Collector.Types.APT_TRADE).update({
+      "extra_data": {
+        "last_page": updater,
+        "last_updated": moment().format('YYYY-MM-DD HH:mm:ss'),
+      },
+    });
   }
 
   public except(): void

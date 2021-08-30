@@ -1,5 +1,6 @@
 import { CircuitInterface } from "../../types";
 import CircuitErrorException from "../exceptions/CircuitErrorException";
+import { sleep } from 'slimphp';
 
 /**
  * Circuit
@@ -15,14 +16,36 @@ import CircuitErrorException from "../exceptions/CircuitErrorException";
  */
 export default class Circuit
 {
+  private circuits: Array<CircuitInterface.Bodies> = [];
+  private times: number = 1;
+  private tickSeconds: number = 0;
+
+  public constructor(circuits: Array<CircuitInterface.Bodies>)
+  {
+    this.circuits = circuits;
+  }
+
   /**
    * Execute Circuit
    */
-  public static fire(circuits: Array<CircuitInterface.Bodies>, ...args: any[]): void
+  public async fire()
   {
+    do {
+      this.execute();
+
+      // Tick Seconds
+      if (this.tickSeconds) {
+        await sleep(this.tickSeconds / 1000);
+      }
+    } while (this.times--);
+  }
+
+  private execute()
+  {
+    // execute step
     const executes: string[] = ['boot', 'prepare', 'handle'];
 
-    circuits.forEach(async circuit => {
+    this.circuits.forEach(async circuit => {
       for (let sort in executes) {
         let method = executes[sort];
 
@@ -35,5 +58,27 @@ export default class Circuit
 
       circuit.always();
     });
+  }
+
+  /**
+   * Delay Times
+   * @param delay miliseconds
+   * @returns
+   */
+  public tick(delay: number): this
+  {
+    this.tickSeconds = delay;
+
+    return this;
+  }
+
+  /**
+   * 실행 횟수
+   */
+  public loop(times: number): this
+  {
+    this.times = times;
+
+    return this;
   }
 }

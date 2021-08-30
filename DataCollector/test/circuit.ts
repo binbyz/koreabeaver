@@ -10,5 +10,7 @@ main();
 function main() {
   // Circuit.fire([new MdcinCollector()]);
   // Circuit.fire([new MdcinCollector(), new AptTradeCollector()]);
-  Circuit.fire([new AptTradeCollector()]);
+
+  const circuit = new Circuit([new AptTradeCollector()]);
+  circuit.tick(5000).loop(Infinity).fire();
 }
