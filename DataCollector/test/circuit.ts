@@ -4,13 +4,17 @@ require('dotenv').config({ path: "../.env" });
 import Circuit from "../src/classes/circuit/Circuit";
 import MdcinCollector from "../src/classes/collector/MdcinCollector";
 import AptTradeCollector from "../src/classes/collector/AptTradeCollector";
+import { CityCode } from '../src/classes/models/LawdCdModel';
 
 main();
 
 function main() {
-  // Circuit.fire([new MdcinCollector()]);
-  // Circuit.fire([new MdcinCollector(), new AptTradeCollector()]);
+  const aptTrade = new AptTradeCollector([
+    CityCode.SEOUL_GEUMCHUN,
+    CityCode.SEOUL_YONGSAN,
+  ]);
 
-  const circuit = new Circuit([new AptTradeCollector()]);
+  // circuit
+  const circuit = new Circuit([aptTrade]);
   circuit.tick(5000).loop(Infinity).fire();
 }

@@ -3,7 +3,7 @@ import { IndexSignature } from "../../types";
 
 export type CityCodeType = string;
 
-export enum Cities {
+export enum CityCode {
   SEOUL = "1100000000",
   SEOUL_YONGSAN = "1117000000",
   SEOUL_GEUMCHUN = "1154500000",

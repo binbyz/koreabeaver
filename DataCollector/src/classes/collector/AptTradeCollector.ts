@@ -1,7 +1,7 @@
 import MolitHandler from './handler/MolitHandler';
 import { CircuitInterface, Data24, Collector } from '../../types';
 import CollectorHistoryModel, { CrawlerHistoryItem, LastPageItem } from '../models/CollectorHistoryModel';
-import { CityCodeType, Cities } from '../models/LawdCdModel';
+import { CityCodeType, CityCode } from '../models/LawdCdModel';
 import AptTradeModel, { AptKeyNameExchanger, AptTradeItem } from '../models/AptTradeModel';
 import { is_undefined, is_null, date } from 'slimphp';
 import { logger } from '../../config/winston';
@@ -32,13 +32,14 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
   private hPageNumberMap = new Map<CityCodeType, number>();
   private hDateMap = new Map<CityCodeType, string>();
 
-  public constructor()
+  public constructor(cities: Array<CityCode>)
   {
     super(AptTradeCollector.encodingKey, AptTradeCollector.decodingKey)
     super.setRequestUri(Data24.API_APT_TRADE + Data24.API_APT_TRADE_URI)
 
     this.historyModel = new CollectorHistoryModel();
     this.aptTradeModel = new AptTradeModel();
+    this.targetCities = cities;
   }
 
   public boot()
@@ -48,12 +49,6 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
 
     // 이전 수집기 모델 히스토리
     this.historyModel.where('type', Collector.Types.APT_TRADE).orderBy('id', 'desc');
-
-    // 수집 도시들 타겟을 설정합니다.
-    this.targetCities = [
-      Cities.SEOUL_GEUMCHUN,
-      // Cities.SEOUL_YONGSAN,
-    ];
   }
 
   public async prepare(): Promise<void>
