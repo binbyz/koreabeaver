@@ -1,0 +1,31 @@
+{
+  "name": "koreabeaver-datacollector",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "test": "mocha",
+    "build": "tsc --build",
+    "clean": "tsc --build --clean"
+  },
+  "author": "kingz",
+  "devDependencies": {
+    "@types/chai": "^4.2.21",
+    "@types/dotenv": "^8.2.0",
+    "@types/mocha": "^9.0.0",
+    "@types/mysql": "^2.15.19",
+    "@types/node": "^16.3.1",
+    "dotenv": "^10.0.0",
+    "mocha": "^9.0.3"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^3.19.0",
+    "moment": "^2.29.1",
+    "mysql-eloquent": "^0.0.5-dev",
+    "mysql2": "^2.2.5",
+    "slimphp": "^0.4.2-dev",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.5"
+  }
+}
