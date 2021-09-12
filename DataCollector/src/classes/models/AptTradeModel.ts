@@ -67,6 +67,39 @@ export default class AptTradeModel extends MysqlEloquent<AptTradeItem>
   protected primaryKey: string = 'id';
   protected tableName: string = 'molit_raw_apt_trade';
 
+  /**
+   * 테이블에 삽입되기 위해 필요한 필드명과 그리고 순서유지
+   */
+  protected static readonly keepSafeFields: string[] = [
+    'uuid', // 해당 키는 테이블에만 존재하는 커스텀 `uuid`
+    'serial_number',
+    'apartment_name',
+    'deal_amount',
+    'build_year',
+    'deal_year',
+    'deal_month',
+    'deal_day',
+    'floor',
+    'road_name',
+    'road_name_bonbun',
+    'road_name_bubun',
+    'road_name_sigungu_code',
+    'road_name_seq',
+    'road_name_basement_code',
+    'road_name_code',
+    'land_code',
+    'dong',
+    'bonbun',
+    'bubun',
+    'jibun',
+    'sigungu_code',
+    'eubmyundong_code',
+    'area_for_exclusive_use',
+    'regional_code',
+    'cancel_deal_type',
+    'cancel_deal_day',
+  ];
+
   public constructor()
   {
     super();
@@ -95,10 +128,8 @@ export default class AptTradeModel extends MysqlEloquent<AptTradeItem>
    */
   public static fillNecessaryFields(items: AptTradeItem[]): AptTradeItem[]
   {
-    const neccessaryFields: string[] = ['serial_number'];
-
     items.forEach((item, idx) => {
-      neccessaryFields.forEach(field => {
+      AptTradeModel.keepSafeFields.forEach(field => {
         if (!(field in item)) {
           items[idx][field] = AptTradeModel.typeCasting(field, '');
         }
@@ -115,40 +146,11 @@ export default class AptTradeModel extends MysqlEloquent<AptTradeItem>
   public static keepSafeFieldOrder(items: AptTradeItem[]): AptTradeItem[]
   {
     let result: AptTradeItem[] = [];
-    const keep: Array<keyof AptTradeItem> = [
-      'uuid', // 해당 키는 테이블에만 존재하는 커스텀 `uuid`
-      'serial_number',
-      'apartment_name',
-      'deal_amount',
-      'build_year',
-      'deal_year',
-      'deal_month',
-      'deal_day',
-      'floor',
-      'road_name',
-      'road_name_bonbun',
-      'road_name_bubun',
-      'road_name_sigungu_code',
-      'road_name_seq',
-      'road_name_basement_code',
-      'road_name_code',
-      'land_code',
-      'dong',
-      'bonbun',
-      'bubun',
-      'jibun',
-      'sigungu_code',
-      'eubmyundong_code',
-      'area_for_exclusive_use',
-      'regional_code',
-      'cancel_deal_type',
-      'cancel_deal_day',
-    ];
 
     items.forEach(item => {
       let copy = <AptTradeItem>{};
 
-      keep.forEach(keepf => {
+      AptTradeModel.keepSafeFields.forEach(keepf => {
         copy[keepf] = item[keepf];
       });
 
@@ -180,6 +182,7 @@ export default class AptTradeModel extends MysqlEloquent<AptTradeItem>
       case 'eubmyundong_code':
       case 'regional_code':
       case 'cancel_deal_day':
+      case 'road_name_seq':
         value = String(value).toString().trim();
         break;
       case 'deal_amount':
@@ -187,7 +190,6 @@ export default class AptTradeModel extends MysqlEloquent<AptTradeItem>
       case 'deal_year':
       case 'deal_month':
       case 'deal_day':
-      case 'road_name_seq':
       case 'jibun':
       case 'area_for_exclusive_use':
         value = parseInt(value, 10);

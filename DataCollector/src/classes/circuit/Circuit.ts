@@ -51,7 +51,7 @@ export default class Circuit
 
         try {
           await circuit[method]();
-        } catch (e) {
+        } catch (e: any) {
           throw new CircuitErrorException(e.stack);
         }
       }

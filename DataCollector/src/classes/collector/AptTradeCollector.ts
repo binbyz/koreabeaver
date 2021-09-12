@@ -103,8 +103,8 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
           // 데이터 유효성 검사
           this.isValidContent();
 
-          // 데이터 영문 데이터로 변환
-          const converted: Array<AptTradeItem> = this.convertAptTradeItems(this.content.response.body.items.item);
+          // 데이터 영문 필드로 변환
+          const converted: Array<AptTradeItem> = this.convertFieldsAndFill(this.content.response.body.items.item);
 
           // upsert massive
           await this.aptTradeModel.upserts(converted, 'uuid', ['deal_amount']);
@@ -125,7 +125,10 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
     });
   }
 
-  private convertAptTradeItems(items: []): Array<AptTradeItem>
+  /**
+   * 데이터 영문 필드로 변환
+   */
+  private convertFieldsAndFill(items: []): Array<AptTradeItem>
   {
     let result: Array<AptTradeItem> = [];
 
