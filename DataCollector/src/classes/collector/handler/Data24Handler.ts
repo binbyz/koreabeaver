@@ -54,7 +54,7 @@ export default class Data24Handler extends EnvironmentHandler implements Data24.
   /**
    * Data24 API의 응답 데이터가 유효한지 확인합니다.
    */
-  protected isValidContent(): boolean
+  protected isValidResponse(): boolean
   {
     if (typeof this.content == 'object' && 'response' in this.content) {
       if (!Object.values(Data24.ResponseError).includes(this.content.response.header.resultCode)) {

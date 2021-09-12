@@ -74,7 +74,7 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
         this.loadXML(response);
 
         // 데이터 유효성 검사
-        this.isValidContent();
+        this.isValidResponse();
 
         const items: Array<MdcinItem> = this.content.response.body.items.item;
 

@@ -3,7 +3,7 @@ import { CircuitInterface, Data24, Collector } from '../../types';
 import CollectorHistoryModel, { CrawlerHistoryItem, LastPageItem } from '../models/CollectorHistoryModel';
 import { CityCodeType, CityCode } from '../models/LawdCdModel';
 import AptTradeModel, { AptKeyNameExchanger, AptTradeItem } from '../models/AptTradeModel';
-import { is_undefined, is_null, date } from 'slimphp';
+import { is_undefined, is_null, is_array } from 'slimphp';
 import { logger } from '../../config/winston';
 import moment from 'moment';
 
@@ -101,7 +101,12 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
           this.loadXML(response);
 
           // 데이터 유효성 검사
-          this.isValidContent();
+          this.isValidResponse();
+
+          if (!is_array(this.content.response.body.items)) {
+            // 수집가능한 데이터가 없습니다.
+            return false;
+          }
 
           // 데이터 영문 필드로 변환
           const converted: Array<AptTradeItem> = this.convertFieldsAndFill(this.content.response.body.items.item);
