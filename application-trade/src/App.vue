@@ -1,15 +1,21 @@
 <template lang="pug">
 #app
   AppHeader
+  AppBody
+  AppFooter
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 import AppHeader from '@/components/AppHeader.vue'
+import AppBody from '@/components/AppBody.vue'
+import AppFooter from '@/components/AppFooter.vue'
 
 export default defineComponent({
   components: {
-    AppHeader
+    AppHeader,
+    AppBody,
+    AppFooter
   }
 })
 </script>
