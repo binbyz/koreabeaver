@@ -30,7 +30,8 @@ export default defineComponent({
   margin-bottom: 30px;
   .title {
     margin: 5px 0 10px 5px;
-    font-size: 110%;
+    font-size: 120%;
+    font-weight: 500;
   }
   .content-wrap {
     display: flex;
@@ -40,11 +41,14 @@ export default defineComponent({
     justify-content: space-evenly;
     align-content: space-around;
     align-content: space-evenly;
+    align-items: stretch;
     border: 1px solid red;
+    height: 400px;
     .preview-one {
       flex-basis: 30%;
       flex-grow: 0;
-      flex-shrink: 0;
+      flex-shrink: 1;
+      height: 45%;
       border: 1px solid;
     }
   }
