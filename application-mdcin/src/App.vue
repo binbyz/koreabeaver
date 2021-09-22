@@ -1,18 +1,21 @@
 <template lang="pug">
 #app
-  AppHeader
-  AppNavSearch
+  app-header
+  app-nav-search
+  main-content
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 import AppHeader from '@/components/AppHeader.vue'
 import AppNavSearch from '@/components/AppNavSearch.vue'
+import MainContent from '@/components/main/MainContent.vue'
 
 export default defineComponent({
   components: {
     AppHeader,
-    AppNavSearch
+    AppNavSearch,
+    MainContent
   }
 })
 </script>
