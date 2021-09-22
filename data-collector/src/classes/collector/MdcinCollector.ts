@@ -1,9 +1,10 @@
 import Data24Handler from './handler/Data24Handler';
 import { Collector, CircuitInterface, Data24 } from '../../types';
 import CollectorHistoryModel from '../models/CollectorHistoryModel';
-import { is_null } from 'slimphp';
+import { is_null, is_array } from 'slimphp';
 import { logger } from '../../config/winston';
 import MdcinModel, { MdcinItem } from '../models/MdcinModel';
+import moment from 'moment';
 
 /**
  * 의약품행정처분서비스
@@ -15,7 +16,8 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
 
   private mdcinModel: MdcinModel;
   private historyModel: CollectorHistoryModel;
-  private readonly numOfRows = 100;
+  private readonly numOfRows = 100; // NO MANDATORY REQUEST PARAMETERS ERROR! numOfRows maximum is =[100]
+  private pageNo: number = 1;
 
   public constructor()
   {
@@ -37,9 +39,9 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
 
   public async prepare(): Promise<void>
   {
-    let r = await this.getPageNo();
+    this.pageNo = await this.getPageNo();
 
-    this.setPageNo(r);
+    this.setPageNo(this.pageNo);
   }
 
   /**
@@ -78,12 +80,29 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
 
         const items: Array<MdcinItem> = this.content.response.body.items.item;
 
+        if (!is_array(items)) {
+          // 수집 가능한 데이터가 없습니다.
+          return false;
+        }
+
         // upsert massive
         await this.mdcinModel.upserts(items, 'ADM_DISPS_SEQ', ['ENTP_NAME', 'ADDR', 'ITEM_NAME']);
 
-        // TODO last_page 업데이트 하기
+        // 마지막 히스토리 업데이트
+        this.updateHistory();
       })
       .catch(e => logger.error(e.stack));
+  }
+
+  private updateHistory(): void
+  {
+    this.historyModel.clear();
+    this.historyModel.where('type', Collector.Types.DATA24_MDCIN).update({
+      "extra_data": {
+        "last_page": this.pageNo,
+        "last_updated": moment().format('YYYY-MM-DD HH:mm:ss')
+      }
+    });
   }
 
   public always()

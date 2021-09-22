@@ -9,7 +9,7 @@ export interface CrawlerHistoryItem extends IndexSignature
 
 export interface ExtraDataItem extends IndexSignature
 {
-  "last_page": LastPageItem[],
+  "last_page": number,
   "last_updated": string,
 }
 

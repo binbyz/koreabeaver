@@ -10,7 +10,7 @@ main();
 
 function main() {
   const aptTrade = new AptTradeCollector([
-    // CityCode.SEOUL_GEUMCHUN,
+    CityCode.SEOUL_GEUMCHUN,
     CityCode.SEOUL_YONGSAN,
   ]);
 
