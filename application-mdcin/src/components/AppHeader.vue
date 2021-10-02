@@ -1,7 +1,8 @@
 <template lang="pug">
 header.app-header
   h1.logo
-    a(href="./") <strong>의약품</strong> 행정처분 <strong>검색</strong>
+    a(href="./") <strong>코리아비버</strong>
+    span.slogun 대한민국 <strong>소비자</strong>의 알 권리
 </template>
 
 <script lang="ts">
@@ -24,8 +25,14 @@ export default defineComponent({
   .logo {
     display: block;
     flex: 1;
-    a {
+    .slogun {
+      display: block;
       color: $color-white;
+      font-size: 18px;
+    }
+    a {
+      color: #65beff;
+      font-size: 24px;
     }
   }
 }

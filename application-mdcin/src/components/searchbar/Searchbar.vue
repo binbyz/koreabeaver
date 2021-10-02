@@ -3,7 +3,7 @@ form.form-searchbar
   input#search.search(
     type="text",
     name="query",
-    placeholder="의약품 이름 검색",
+    placeholder="상품명, 상호명, 주소지 검색",
     autocomplete="off",
   )
   button.submit(type="submit") 검색
