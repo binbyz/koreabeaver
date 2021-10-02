@@ -1,4 +1,4 @@
-import { CircuitInterface } from "../../types";
+import { CircuitInterface } from "./CircuitInterface";
 import CircuitErrorException from "../exceptions/CircuitErrorException";
 import { sleep } from 'slimphp';
 
