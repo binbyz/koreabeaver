@@ -1,6 +1,7 @@
 import Data24Handler from './handler/Data24Handler';
-import { Collector, CircuitInterface, Data24 } from '../../types';
-import CollectorHistoryModel from '../models/CollectorHistoryModel';
+import { Collector, Data24 } from '../../types';
+import { CircuitInterface } from '../circuit/CircuitInterface';
+import CircuitModel from '../models/CircuitModel';
 import { is_null, is_array } from 'slimphp';
 import { logger } from '../../config/winston';
 import MdcinModel, { MdcinItem } from '../models/MdcinModel';
@@ -15,7 +16,7 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
   private static readonly decodingKey: string = process.env.MDCIN_DECODING_KEY! || '';
 
   private mdcinModel: MdcinModel;
-  private historyModel: CollectorHistoryModel;
+  private historyModel: CircuitModel;
   private readonly numOfRows = 100; // NO MANDATORY REQUEST PARAMETERS ERROR! numOfRows maximum is =[100]
   private pageNo: number = 1;
 
@@ -25,7 +26,7 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
     super.setRequestUri(Data24.API_MDCIN_HOST + Data24.API_MDCIN_URI)
 
     this.mdcinModel = new MdcinModel();
-    this.historyModel = new CollectorHistoryModel();
+    this.historyModel = new CircuitModel();
   }
 
   public boot()
@@ -60,38 +61,40 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
     return pageNo;
   }
 
-  public handle()
+  public async handle()
   {
     logger.info(`의약품행정처분 서비스를 호출합니다. (requestParams: ${JSON.stringify(this.requestParams)})`);
     logger.info(this.getRequestUriWithParams());
 
-    // 실제 API 페이지를 호출합니다.
-    this.handleContents();
+    const items: MdcinItem[] = await this.getItems();
+
+    this.updateContentsAndHistory(items);
   }
 
-  private async handleContents()
+  private async getItems(): Promise<MdcinItem[]>
   {
-    await this.call()
-      .then(async response => {
+    return this.call()
+      .then(response => {
         this.loadXML(response);
 
         // 데이터 유효성 검사
         this.isValidResponse();
 
-        const items: Array<MdcinItem> = this.content.response.body.items.item;
+        return is_array(this.content.response.body.items.item)
+                  ? this.content.response.body.items.item
+                  : [];
+      });
+  }
 
-        if (!is_array(items)) {
-          // 수집 가능한 데이터가 없습니다.
-          return false;
-        }
+  private async updateContentsAndHistory(items: MdcinItem[])
+  {
+    if (items.length) {
+      // upsert massive
+      await this.mdcinModel.upserts(items, 'ADM_DISPS_SEQ', ['ENTP_NAME', 'ADDR', 'ITEM_NAME']);
+    }
 
-        // upsert massive
-        await this.mdcinModel.upserts(items, 'ADM_DISPS_SEQ', ['ENTP_NAME', 'ADDR', 'ITEM_NAME']);
-
-        // 마지막 히스토리 업데이트
-        this.updateHistory();
-      })
-      .catch(e => logger.error(e.stack));
+    // 마지막 히스토리 업데이트
+    this.updateHistory();
   }
 
   private updateHistory(): void

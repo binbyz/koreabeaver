@@ -20,7 +20,7 @@ export interface LastPageItem extends IndexSignature
   "page": number;
 }
 
-export default class CollectorHistoryModel extends MysqlEloquent<CrawlerHistoryItem>
+export default class CircuitModel extends MysqlEloquent<CrawlerHistoryItem>
 {
   protected databaseName: string = 'beaver';
   protected primaryKey: string = 'id';

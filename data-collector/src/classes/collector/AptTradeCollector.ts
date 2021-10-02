@@ -1,6 +1,6 @@
 import MolitHandler from './handler/MolitHandler';
 import { CircuitInterface, Data24, Collector } from '../../types';
-import CollectorHistoryModel, { CrawlerHistoryItem, LastPageItem } from '../models/CollectorHistoryModel';
+import CircuitModel, { CrawlerHistoryItem, LastPageItem } from '../models/CircuitModel';
 import { CityCodeType, CityCode } from '../models/LawdCdModel';
 import AptTradeModel, { AptKeyNameExchanger, AptTradeItem } from '../models/AptTradeModel';
 import { is_undefined, is_null, is_array } from 'slimphp';
@@ -15,7 +15,7 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
   private static readonly encodingKey: string = process.env.APT_TRADE_ENCODING_KEY! || '';
   private static readonly decodingKey: string = process.env.APT_TRADE_DECODING_KEY! || '';
 
-  private historyModel: CollectorHistoryModel;
+  private historyModel: CircuitModel;
   private aptTradeModel: AptTradeModel;
   private readonly numOfRows = 500;
   private readonly crawlStartDate = '201501';
@@ -37,7 +37,7 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
     super(AptTradeCollector.encodingKey, AptTradeCollector.decodingKey)
     super.setRequestUri(Data24.API_APT_TRADE + Data24.API_APT_TRADE_URI)
 
-    this.historyModel = new CollectorHistoryModel();
+    this.historyModel = new CircuitModel();
     this.aptTradeModel = new AptTradeModel();
     this.targetCities = cities;
   }

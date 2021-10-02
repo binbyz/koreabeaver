@@ -5,7 +5,7 @@ import MdcinCollector from './classes/collector/MdcinCollector';
 import AptTradeCollector from './classes/collector/AptTradeCollector';
 
 import MdcinModel from './classes/models/MdcinModel';
-import CollectorHistoryModel from './classes/models/CollectorHistoryModel';
+import CircuitModel from './classes/models/CircuitModel';
 
 import { logger } from './config/winston';
 import { Collector } from './types';
@@ -37,7 +37,7 @@ function main()
   const mdcinCollector = new MdcinCollector(process.env.MDCIN_ENCODING_KEY!);
   const aptTradeCollector = new AptTradeCollector(process.env.APT_TRADE_ENCODING_KEY!);
 
-  const historyModel = new CollectorHistoryModel();
+  const historyModel = new CircuitModel();
   const mdcinModel: MdcinModel = new MdcinModel();
 
   setInterval(async () => {
