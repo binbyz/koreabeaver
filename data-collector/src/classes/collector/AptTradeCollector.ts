@@ -1,11 +1,12 @@
 import MolitHandler from './handler/MolitHandler';
-import { CircuitInterface, Data24, Collector } from '../../types';
-import CircuitModel, { CrawlerHistoryItem, LastPageItem } from '../models/CircuitModel';
+import { Data24 } from '../../types';
+import CircuitModel, { CrawlerHistoryItem, AptLastPageItem, CircuitTypes } from '../models/CircuitModel';
 import { CityCodeType, CityCode } from '../models/LawdCdModel';
 import AptTradeModel, { AptKeyNameExchanger, AptTradeItem } from '../models/AptTradeModel';
 import { is_undefined, is_null, is_array } from 'slimphp';
 import { logger } from '../../config/winston';
 import moment from 'moment';
+import { CircuitInterface } from '../circuit/CircuitInterface';
 
 /**
  * 국토교통부 아파트매매 실거래 상세 자료
@@ -48,7 +49,7 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
     this.setNumOfRows(this.numOfRows);
 
     // 이전 수집기 모델 히스토리
-    this.historyModel.where('type', Collector.Types.APT_TRADE).orderBy('id', 'desc');
+    this.historyModel.where('type', CircuitTypes.APT_TRADE).orderBy('id', 'desc');
   }
 
   public async prepare(): Promise<void>
@@ -64,8 +65,8 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
     this.hModel = await this.historyModel.first();
 
     if (!is_null(this.hModel)) {
-      for (let idx in this.hModel.extra_data.last_page) {
-        let history = this.hModel.extra_data.last_page[idx];
+      for (let idx in this.hModel.extra_data.last_page as AptLastPageItem[]) {
+        let history = (this.hModel.extra_data.last_page as AptLastPageItem[])[idx];
 
         // 지역코드별 이전 히스토리 캐시
         this.hPageNumberMap.set(history.city_code!, !is_undefined(history.last_page) ? history.last_page : 1);
@@ -74,7 +75,7 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
         this.hDateMap.set(history.city_code!, !is_undefined(history.date) ? history.date : this.crawlStartDate);
       }
     } else {
-      throw new Error(`히스토리가 설정돼 있지 않습니다. (Collector.Types: ${Collector.Types.APT_TRADE})`);
+      throw new Error(`히스토리가 설정돼 있지 않습니다. (Collector.Types: ${CircuitTypes.APT_TRADE})`);
     }
   }
 
@@ -109,7 +110,7 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
           }
 
           // 데이터 영문 필드로 변환
-          const converted: Array<AptTradeItem> = this.convertFieldsAndFill(this.content.response.body.items.item);
+          const converted: AptTradeItem[] = this.convertFieldsAndFill(this.content.response.body.items.item);
 
           // upsert massive
           await this.aptTradeModel.upserts(converted, 'uuid', ['deal_amount']);
@@ -133,9 +134,9 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
   /**
    * 데이터 영문 필드로 변환
    */
-  private convertFieldsAndFill(items: []): Array<AptTradeItem>
+  private convertFieldsAndFill(items: []): AptTradeItem[]
   {
-    let result: Array<AptTradeItem> = [];
+    let result: AptTradeItem[] = [];
 
     items.forEach(itemKr => {
       let row = <AptTradeItem>{};
@@ -166,9 +167,9 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
   /**
    * 업데이트시킬 히스토리 아이템을 반환합니다.
    */
-  private getUpdateHistory(item: LastPageItem, itemCount: number): LastPageItem[]
+  private getUpdateHistory(item: AptLastPageItem, itemCount: number): AptLastPageItem[]
   {
-    const without = this.hModel.extra_data.last_page.filter(r => item.city_code != r.city_code);
+    const without = (this.hModel.extra_data.last_page as AptLastPageItem[]).filter(r => item.city_code != r.city_code);
 
     if (itemCount < this.numOfRows) {
       item.page = 1;
@@ -188,10 +189,10 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
   /**
    * 히스토리 업데이트
    */
-  private updateHistory(updater: LastPageItem[]): void
+  private updateHistory(updater: AptLastPageItem[]): void
   {
     this.historyModel.clear();
-    this.historyModel.where('type', Collector.Types.APT_TRADE).update({
+    this.historyModel.where('type', CircuitTypes.APT_TRADE).update({
       "extra_data": {
         "last_page": updater,
         "last_updated": moment().format('YYYY-MM-DD HH:mm:ss'),

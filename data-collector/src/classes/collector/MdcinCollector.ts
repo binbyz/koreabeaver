@@ -1,7 +1,7 @@
 import Data24Handler from './handler/Data24Handler';
-import { Collector, Data24 } from '../../types';
+import { Data24 } from '../../types';
 import { CircuitInterface } from '../circuit/CircuitInterface';
-import CircuitModel from '../models/CircuitModel';
+import CircuitModel, { CircuitTypes } from '../models/CircuitModel';
 import { is_null, is_array } from 'slimphp';
 import { logger } from '../../config/winston';
 import MdcinModel, { MdcinItem } from '../models/MdcinModel';
@@ -35,7 +35,7 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
     this.setNumOfRows(this.numOfRows);
 
     // 이전 수집기 모델 히스토리
-    this.historyModel.where('type', Collector.Types.DATA24_MDCIN).orderBy('id', 'desc');
+    this.historyModel.where('type', CircuitTypes.DATA24_MDCIN).orderBy('id', 'desc');
   }
 
   public async prepare(): Promise<void>
@@ -100,7 +100,7 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
   private updateHistory(): void
   {
     this.historyModel.clear();
-    this.historyModel.where('type', Collector.Types.DATA24_MDCIN).update({
+    this.historyModel.where('type', CircuitTypes.DATA24_MDCIN).update({
       "extra_data": {
         "last_page": this.pageNo,
         "last_updated": moment().format('YYYY-MM-DD HH:mm:ss')

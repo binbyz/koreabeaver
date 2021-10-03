@@ -8,7 +8,7 @@ import MdcinModel from './classes/models/MdcinModel';
 import CircuitModel from './classes/models/CircuitModel';
 
 import { logger } from './config/winston';
-import { Collector } from './types';
+import { Circuit } from './types';
 import { getLocaleDatetime } from './lib/slim';
 
 logger.info('Start DataCollector');
@@ -42,7 +42,7 @@ function main()
 
   setInterval(async () => {
     // 이전 히스토리 가져오기
-    const historyOne = await historyModel.where('type', Collector.Types.DATA24_MDCIN).orderBy('id', 'desc').first();
+    const historyOne = await historyModel.where('type', Circuit.Types.DATA24_MDCIN).orderBy('id', 'desc').first();
     let pageNo = 1;
 
     if (historyOne !== null) {
@@ -61,7 +61,7 @@ function main()
       .catch(error => mdcinModel.throws(error));
 
     // 마지막 페이징 업데이트
-    historyModel.clear().where('type', Collector.Types.DATA24_MDCIN).update({
+    historyModel.clear().where('type', Circuit.Types.DATA24_MDCIN).update({
       "extra_data": {
         "last_page": pageNo,
         "last_updated": getLocaleDatetime(),
