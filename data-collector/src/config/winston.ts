@@ -9,43 +9,43 @@ const logFormat = printf(info => {
 });
 
 const logger = winston.createLogger({
-  format: combine(
+  "format": combine(
     timestamp({
-      format: 'YYYY-MM-DD HH:mm:ss',
+      "format": 'YYYY-MM-DD HH:mm:ss',
     }),
     logFormat,
   ),
-  transports: [
+  "transports": [
     new winstonDaily({
-      level: 'http',
-      datePattern: 'YYYY-MM-DD',
-      dirname: logDir + '/http',
-      filename: `%DATE%.log`,
-      maxFiles: 30,
-      zippedArchive: true,
+      "level": 'http',
+      "datePattern": 'YYYY-MM-DD',
+      "dirname": logDir + '/http',
+      "filename": `%DATE%.log`,
+      "maxFiles": 30,
+      "zippedArchive": true,
     }),
     new winstonDaily({
-      level: 'info',
-      datePattern: 'YYYY-MM-DD',
-      dirname: logDir,
-      filename: `%DATE%.log`,
-      maxFiles: 30,
-      zippedArchive: true,
+      "level": 'info',
+      "datePattern": 'YYYY-MM-DD',
+      "dirname": logDir,
+      "filename": `%DATE%.log`,
+      "maxFiles": 30,
+      "zippedArchive": true,
     }),
     new winstonDaily({
-      level: 'error',
-      datePattern: 'YYYY-MM-DD',
-      dirname: logDir + '/error',
-      filename: `%DATE%.log`,
-      maxFiles: 30,
-      zippedArchive: true,
+      "level": 'error',
+      "datePattern": 'YYYY-MM-DD',
+      "dirname": logDir + '/error',
+      "filename": `%DATE%.log`,
+      "maxFiles": 30,
+      "zippedArchive": true,
     }),
   ]
 });
 
 if (process.env.NODE_ENV !== 'production') {
   logger.add(new winston.transports.Console({
-    format: winston.format.combine(
+    "format": winston.format.combine(
       winston.format.colorize(),
       winston.format.simple(),
     )
