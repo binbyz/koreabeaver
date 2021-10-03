@@ -1,3 +1,5 @@
+import { IndexSignature } from "../../types";
+
 export namespace CircuitInterface
 {
   export type BootFn = () => void;
@@ -5,7 +7,7 @@ export namespace CircuitInterface
   export type HandleFn = () => void;
   export type AlwaysFn = () => void;
 
-  export interface Bodies
+  export interface Bodies extends IndexSignature
   {
     /**
      * step 1: boot

@@ -15,15 +15,6 @@ export interface IndexSignature
   [index: string]: any // index signature
 }
 
-export namespace Collector
-{
-  export enum Types
-  {
-    DATA24_MDCIN = 1,
-    APT_TRADE = 2,
-  }
-}
-
 export namespace Data24
 {
   export const API_MDCIN_HOST = 'http://apis.data.go.kr';
