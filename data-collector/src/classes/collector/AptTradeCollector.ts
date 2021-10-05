@@ -1,6 +1,6 @@
 import MolitHandler from './handler/MolitHandler';
 import { Data24 } from '../../types';
-import CircuitModel, { CrawlerHistoryItem, AptLastPageItem, CircuitTypes } from '../models/CircuitModel';
+import CircuitModel, { CircuitHistoryItem, AptLastPageItem, CircuitTypes } from '../models/CircuitModel';
 import { CityCodeType, CityCode } from '../models/LawdCdModel';
 import AptTradeModel, { AptKeyNameExchanger, AptTradeItem } from '../models/AptTradeModel';
 import { is_undefined, is_null, is_array } from 'slimphp';
@@ -22,7 +22,7 @@ export default class AptTradeCollector extends MolitHandler implements CircuitIn
   private readonly crawlStartDate = '201501';
   private targetCities: string[] = [];
 
-  private hModel: CrawlerHistoryItem = {
+  private hModel: CircuitHistoryItem = {
     "type": 0,
     "extra_data": {
       "last_page": [],

@@ -10,7 +10,7 @@ export enum CircuitTypes {
   MDCIN_CONVERTER = 3, // 의약행정처분 converter circuit
 }
 
-export interface CrawlerHistoryItem extends IndexSignature
+export interface CircuitHistoryItem extends IndexSignature
 {
   "type": CircuitTypes;
   "extra_data": ExtraDataItem;
@@ -36,11 +36,11 @@ export interface ConverterExtraData extends IndexSignature
   "last_updated": string;
 }
 
-export default class CircuitModel extends MysqlEloquent<CrawlerHistoryItem>
+export default class CircuitModel extends MysqlEloquent<CircuitHistoryItem>
 {
   protected databaseName: string = 'beaver';
   protected primaryKey: string = 'id';
-  protected tableName: string = 'collector_history';
+  protected tableName: string = 'circuits';
 
   public constructor()
   {
