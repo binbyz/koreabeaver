@@ -24,7 +24,7 @@
     "elasticsearch": "^16.7.2",
     "fast-xml-parser": "^3.19.0",
     "moment": "^2.29.1",
-    "mysql-eloquent": "^0.1.0-dev",
+    "mysql-eloquent": "^0.1.2-dev",
     "mysql2": "^2.2.5",
     "slimphp": "^0.4.2-dev",
     "winston": "^3.3.3",
