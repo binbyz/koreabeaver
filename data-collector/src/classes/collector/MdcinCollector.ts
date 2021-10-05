@@ -51,24 +51,14 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
    */
   private async getPageNo()
   {
-    const collectorHistory = await this.historyModel.first();
+    const history = await this.historyModel.first();
     let pageNo = 1;
 
-    if (!is_null(collectorHistory)) {
-      pageNo = collectorHistory.extra_data.last_page + 1;
+    if (!is_null(history)) {
+      pageNo = history.extra_data.last_page + 1;
     }
 
     return pageNo;
-  }
-
-  public async handle()
-  {
-    logger.info(`의약품행정처분 서비스를 호출합니다. (requestParams: ${JSON.stringify(this.requestParams)})`);
-    logger.info(this.getRequestUriWithParams());
-
-    const items: MdcinItem[] = await this.getItems();
-
-    this.updateContentsAndHistory(items);
   }
 
   private async getItems(): Promise<MdcinItem[]>
@@ -106,6 +96,16 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
         "last_updated": moment().format('YYYY-MM-DD HH:mm:ss')
       }
     });
+  }
+
+  public async handle()
+  {
+    logger.info(`[COLLECTOR] MdcinCollector (requestParams: ${JSON.stringify(this.requestParams)})`);
+    logger.info(this.getRequestUriWithParams());
+
+    const items: MdcinItem[] = await this.getItems();
+
+    this.updateContentsAndHistory(items);
   }
 
   public always()
