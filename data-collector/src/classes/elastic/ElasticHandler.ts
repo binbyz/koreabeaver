@@ -1,4 +1,4 @@
-import ElasticSearch from 'elasticsearch';
+import ElasticSearch from '@elastic/elasticsearch';
 import { logger } from '../../config/winston';
 
 export default class ElasticHandler
@@ -6,23 +6,18 @@ export default class ElasticHandler
   protected client: ElasticSearch.Client;
 
   public constructor() {
+    // https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/client-connecting.html
     this.client = new ElasticSearch.Client({
-      "host": `${process.env.ELASTIC_HOST}:${process.env.ELASTIC_PORT}`,
-      "log": "trace",
-      "apiVersion": process.env.ELASTIC_API_VERSION
+      "node": `${process.env.ELASTIC_HOST}:${process.env.ELASTIC_PORT}`,
     });
   }
 
   /**
    * Send Ping
    */
-  public ping(): void {
-    this.client.ping({ "requestTimeout": 1000 }, error => {
-      if (error) {
-        logger.error(`[PING] ElasticSearch ping failed: ${error}`);
-      } else {
-        logger.info('[PING] ElasticSearch ping succeeded');
-      }
-    })
+  public async ping(): Promise<boolean> {
+    const pong = await this.client.ping();
+
+    return pong.body;
   }
 }
