@@ -13,7 +13,7 @@ export enum CircuitTypes {
 export interface CircuitHistoryItem extends IndexSignature
 {
   "type": CircuitTypes;
-  "extra_data": ExtraDataItem;
+  "extra_data": ExtraDataItem | ConverterExtraData;
 }
 
 export interface ExtraDataItem extends IndexSignature
@@ -31,7 +31,7 @@ export interface AptLastPageItem extends IndexSignature
 
 export interface ConverterExtraData extends IndexSignature
 {
-  "raw_table": string;
+  "raw_table"?: string;
   "last_convert_id": number;
   "last_updated": string;
 }

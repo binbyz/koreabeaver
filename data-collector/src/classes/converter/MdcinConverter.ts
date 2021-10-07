@@ -3,6 +3,8 @@ import { CircuitInterface } from "../circuit/CircuitInterface";
 import ElasticHandler from "../elastic/ElasticHandler";
 import CircuitModel, { CircuitHistoryItem, CircuitTypes } from "../models/CircuitModel";
 import MdcinModel from "../models/MdcinModel";
+import { BulkResponse } from "@elastic/elasticsearch/api/types";
+import moment from "moment";
 
 export default class MdcinConverter extends ElasticHandler implements CircuitInterface.Bodies
 {
@@ -63,8 +65,53 @@ export default class MdcinConverter extends ElasticHandler implements CircuitInt
   {
     logger.info(`[CONVERT] mdcin items will be converted into elasticsearch. (history: ${JSON.stringify(this.history)})`);
 
-    const items = await this.getConvertItems();
-    console.log(items);
+    const dataset = await this.getConvertItems();
+
+    // @link https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap
+    const bodies = Array.from(dataset).flatMap(document => {
+      return [
+        { "index": { "_index": "mdcin" } },
+        Object(document),
+      ];
+    });
+
+    if (bodies.length) {
+      const { body: bulkResponse } = await this.client.bulk({
+        "index": "mdcin",
+        "refresh": true,
+        "body": bodies
+      });
+
+      if (bulkResponse.errors) {
+        this.bulkErrorHandler(<BulkResponse>bulkResponse);
+      } else {
+        // ANCHOR 마지막 컨버딩 아이디 업데이트
+        this.lastConvertId = dataset[0].id;
+
+        this.updateHistory();
+      }
+    }
+  }
+
+  /**
+   * Elastic Bulk
+   * @param body BulkResponse
+   */
+  private bulkErrorHandler(response: BulkResponse): void
+  {
+    // TODO notify error
+    logger.error(`[CONVERT:bulkErrorHandler] bulk update error. ${JSON.stringify(this.history)}`);
+  }
+
+  private updateHistory(): void
+  {
+    this.historyModel.clear();
+    this.historyModel.where('type', CircuitTypes.MDCIN_CONVERTER).update({
+      "extra_data": {
+        "last_convert_id": this.lastConvertId,
+        "last_updated": moment().format('YYYY-MM-DD HH:mm:ss')
+      }
+    });
   }
 
   public always()
