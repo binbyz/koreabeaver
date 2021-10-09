@@ -11,7 +11,7 @@ export default class MdcinConverter extends ElasticHandler implements CircuitInt
   private historyModel: CircuitModel;
   private mdcinModel: MdcinModel;
   private history: CircuitHistoryItem;
-  private static readonly convertLimit: number = 10; // ANCHOR for test
+  private static readonly convertLimit: number = 1000; // ANCHOR for test
   private lastConvertId: number;
 
   public constructor() {
@@ -56,7 +56,7 @@ export default class MdcinConverter extends ElasticHandler implements CircuitInt
     return this.mdcinModel
       .select(fields)
       .where('id', this.lastConvertId, '>')
-      .orderBy('id', 'desc')
+      .orderBy('id', 'asc')
       .limit(MdcinConverter.convertLimit)
       .get();
   }
@@ -86,7 +86,7 @@ export default class MdcinConverter extends ElasticHandler implements CircuitInt
         this.bulkErrorHandler(<BulkResponse>bulkResponse);
       } else {
         // ANCHOR 마지막 컨버딩 아이디 업데이트
-        this.lastConvertId = dataset[0].id;
+        this.lastConvertId = dataset[dataset.length - 1].id;
 
         this.updateHistory();
       }

@@ -10,5 +10,5 @@ function main() {
 
   // circuit
   const circuit = new Circuit([mdcinConverter]);
-  circuit.tick(60 * 1000).loop(Infinity).fire();
+  circuit.tick(5 * 1000).loop(Infinity).fire();
 }
