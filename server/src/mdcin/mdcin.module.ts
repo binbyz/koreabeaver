@@ -6,6 +6,7 @@ import { MdcinService } from './mdcin.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Data24RawMdcin])],
+  exports: [TypeOrmModule],
   controllers: [MdcinController],
   providers: [MdcinService],
 })
