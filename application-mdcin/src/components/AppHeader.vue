@@ -2,7 +2,8 @@
 header.app-header
   h1.logo
     a(href="./") <strong>코리아비버</strong>
-    span.slogun 대한민국 <strong>소비자</strong>의 알 권리
+
+  span.slogun 대한민국 <strong>소비자</strong>의 알 권리
 </template>
 
 <script lang="ts">
@@ -18,22 +19,30 @@ export default defineComponent({
 
 .app-header {
   display: flex;
-  text-align: center;
-  min-height: 100px;
+  flex-direction: column;
   align-items: center;
+  text-align: center;
+  min-height: 120px;
+  width: $content-width;
+  margin: 0 auto;
   background-color: $accent-color;
+  border-bottom-left-radius: 50px;
+  border-bottom-right-radius: 50px;
   .logo {
-    display: block;
+    display: flex;
     flex: 1;
-    .slogun {
-      display: block;
-      color: $color-white;
-      font-size: 18px;
-    }
+    align-items: flex-end;
     a {
-      color: #65beff;
-      font-size: 24px;
+      color: $color-white;
+      font-size: 32px;
     }
+  }
+  .slogun {
+    display: flex;
+    flex: 1;
+    align-items: baseline;
+    color: $color-white;
+    font-size: 18px;
   }
 }
 </style>

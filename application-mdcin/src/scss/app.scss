@@ -2,7 +2,7 @@
 @import '@/scss/_mixins.scss';
 
 body {
-  background-color: rgb(238, 240, 241);
+  background-color: $background-color;
   font-family: -apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   line-height: 24px;
   -webkit-font-smoothing: antialiased;

@@ -1,5 +1,5 @@
 <template lang="pug">
-#app
+.core
   app-header
   app-nav-search
   main-content
@@ -21,9 +21,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import '@/scss/_app.scss';
+@import '@/scss/app.scss';
+@import '@/scss/global.scss';
 
-#app {
+.core {
   display: flex;
   flex-direction: column;
   width: 100%;
