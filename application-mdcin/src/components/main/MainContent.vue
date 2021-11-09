@@ -7,7 +7,7 @@ app-body
 import { defineComponent, onMounted } from 'vue'
 import AppBody from '@/components/AppBody.vue'
 import ItemTable from '@/components/items/ItemTable.vue'
-import axios from 'axios'
+import { getLatestGoods } from '@/api/goods'
 
 export default defineComponent({
   components: {
@@ -15,7 +15,7 @@ export default defineComponent({
     ItemTable
   },
   setup () {
-    onMounted(() => console.log('test'))
+    onMounted(getLatestGoods)
   }
 })
 </script>
