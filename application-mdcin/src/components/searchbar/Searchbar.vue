@@ -29,7 +29,7 @@ export default defineComponent({
     padding: 10px 32px;
     font-size: 16px;
     color: $accent-color;
-    border: 1px solid $color-soft-silver;
+    border: 1px solid $color-silver;
     border-radius: 15px;
     width: 100%;
   }
