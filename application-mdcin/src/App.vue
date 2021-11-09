@@ -23,11 +23,13 @@ export default defineComponent({
 <style lang="scss">
 @import '@/scss/app.scss';
 @import '@/scss/global.scss';
+@import '@/scss/_variables.scss';
 
 .core {
   display: flex;
   flex-direction: column;
   width: 100%;
   margin: 0 auto;
+  border-top: 6px solid $accent-color;
 }
 </style>
