@@ -5,6 +5,7 @@ form.form-searchbar
     name="query",
     placeholder="상품명, 상호명, 주소지 검색",
     autocomplete="off",
+    @input="changeKeyword"
   )
   button.submit(type="submit") 검색
 </template>
@@ -13,7 +14,15 @@ form.form-searchbar
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  components: {
+  data () {
+    return {
+      keyword: ''
+    }
+  },
+  methods: {
+    changeKeyword (e: KeyboardEvent): void {
+      this.keyword = (e.target as HTMLInputElement).value
+    }
   }
 })
 </script>
@@ -32,6 +41,7 @@ export default defineComponent({
     border: 1px solid $color-silver;
     border-radius: 15px;
     width: 100%;
+    box-sizing: border-box;
   }
   button.submit {
     display: none;

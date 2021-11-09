@@ -2,7 +2,6 @@
 header.app-header
   h1.logo
     a(href="./") <strong>코리아비버</strong>
-
   span.slogun 대한민국 <strong>소비자</strong>의 알 권리
 </template>
 
@@ -23,7 +22,6 @@ export default defineComponent({
   align-items: center;
   text-align: center;
   min-height: 120px;
-  width: $content-width;
   margin: 0 auto;
   .logo {
     display: flex;

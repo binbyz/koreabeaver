@@ -3,6 +3,7 @@
   app-header
   app-nav-search
   main-content
+  app-footer
 </template>
 
 <script lang="ts">
@@ -10,12 +11,14 @@ import { defineComponent } from 'vue'
 import AppHeader from '@/components/AppHeader.vue'
 import AppNavSearch from '@/components/AppNavSearch.vue'
 import MainContent from '@/components/main/MainContent.vue'
+import AppFooter from '@/components/AppFooter.vue'
 
 export default defineComponent({
   components: {
     AppHeader,
     AppNavSearch,
-    MainContent
+    MainContent,
+    AppFooter
   }
 })
 </script>
@@ -29,7 +32,9 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 100%;
   margin: 0 auto;
   border-top: 6px solid $accent-color;
+  box-sizing: border-box;
 }
 </style>

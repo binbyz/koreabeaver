@@ -47,6 +47,8 @@ table.item-table {
     padding: 10px 10px;
   }
   th {
+    color: $accent-color;
+    font-weight: bold;
     border-color: $color-silver;
     border-width: 1px 0 1px 0;
     border-style: solid;

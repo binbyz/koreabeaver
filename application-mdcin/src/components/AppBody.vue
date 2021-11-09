@@ -1,5 +1,5 @@
 <template lang="pug">
-div.app-body
+main.app-body
   slot
 </template>
 
@@ -17,6 +17,6 @@ export default defineComponent({
 
 .app-body {
   @include box-center;
-  width: $content-width;
+  flex-grow: 1;
 }
 </style>

@@ -1,15 +1,21 @@
 @import '@/scss/_variables.scss';
 @import '@/scss/_mixins.scss';
 
+#app {
+  height: 100%;
+}
+
+html, body {
+  height: 100%;
+}
+
 body {
   background-color: $background-color;
   font-family: -apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  line-height: 24px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: $font-color;
-  margin: 0;
-  padding: 0;
+  @include reset-margin;
 }
 
 a {
@@ -30,5 +36,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ul, li {
+  @include reset-margin;
+}
+
+footer {
   @include reset-margin;
 }
