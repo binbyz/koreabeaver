@@ -23,5 +23,6 @@ export default defineComponent({
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  margin-bottom: 30px;
 }
 </style>

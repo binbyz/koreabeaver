@@ -25,23 +25,20 @@ export default defineComponent({
   min-height: 120px;
   width: $content-width;
   margin: 0 auto;
-  background-color: $accent-color;
-  border-bottom-left-radius: 50px;
-  border-bottom-right-radius: 50px;
   .logo {
     display: flex;
     flex: 1;
     align-items: flex-end;
     a {
-      color: $color-white;
+      color: $accent-color;
       font-size: 32px;
     }
   }
   .slogun {
     display: flex;
     flex: 1;
-    align-items: baseline;
-    color: $color-white;
+    align-items: center;
+    color: $accent-color;
     font-size: 18px;
   }
 }

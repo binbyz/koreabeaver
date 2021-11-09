@@ -28,8 +28,9 @@ export default defineComponent({
     outline: none;
     padding: 10px 32px;
     font-size: 16px;
-    color: $font-color;
-    border: 1px solid #e0e0e0;
+    color: $accent-color;
+    border: 1px solid $color-soft-silver;
+    border-radius: 15px;
     width: 100%;
   }
   button.submit {
