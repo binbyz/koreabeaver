@@ -17,7 +17,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .search-bar {
   min-height: 80px;
-  width: 45%;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: row;

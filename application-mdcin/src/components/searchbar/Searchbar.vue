@@ -31,7 +31,7 @@ export default defineComponent({
 @import '@/scss/_variables.scss';
 
 .form-searchbar {
-  width: 100%;
+  width: 80%;
   input.search {
     box-shadow: none;
     outline: none;

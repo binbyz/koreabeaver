@@ -1,8 +1,9 @@
 <template lang="pug">
 .core
-  app-header
-  app-nav-search
-  main-content
+  .responsive-contents
+    app-header
+    app-nav-search
+    main-content
   app-footer
 </template>
 
@@ -36,5 +37,12 @@ export default defineComponent({
   margin: 0 auto;
   border-top: 6px solid $accent-color;
   box-sizing: border-box;
+  .responsive-contents {
+    display: flex;
+    height: 100%;
+    width: $content-width;
+    margin: 0 auto;
+    flex-direction: column;
+  }
 }
 </style>

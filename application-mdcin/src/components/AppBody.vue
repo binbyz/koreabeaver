@@ -18,5 +18,6 @@ export default defineComponent({
 .app-body {
   @include box-center;
   flex-grow: 1;
+  width: 100%;
 }
 </style>

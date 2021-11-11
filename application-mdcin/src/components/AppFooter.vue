@@ -25,7 +25,10 @@ export default defineComponent({
     padding: 15px;
     color: $color-silver-bold;
     font-size: 14px;
-    border-right: 1px solid $color-silver;
+    border-left: 1px solid $color-silver;
+    &:last-child {
+      border-right: 1px solid $color-silver;
+    }
   }
 }
 </style>

@@ -1,3 +1,6 @@
+@import '@/scss/_mixins.scss';
+@import '@/scss/_variables.scss';
+
 span.g-status {
   $font-color-normal: #aaaaaa;
   $font-color-good: #1aaa55;
@@ -11,4 +14,18 @@ span.g-status {
   color: $font-color-normal;
   border-radius: 5px;
   font-size: 11px;
+}
+
+h3 {
+  &.g-item-title {
+    color: $accent-color;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    &:before {
+      display: inline-block;
+      content: "☠️";
+      margin-right: 10px;
+    }
+  }
 }

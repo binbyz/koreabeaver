@@ -1,6 +1,7 @@
 <template lang="pug">
+h3.g-item-title 최신 행정처분
 table.item-table
-  caption 최근 올라온 행정처분목록
+  caption 최신 행정처분
   colgroup
     col.status
     col.company-name
