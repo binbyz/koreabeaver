@@ -38,7 +38,7 @@ export interface ConverterExtraData extends IndexSignature
 
 export default class CircuitModel extends MysqlEloquent<CircuitHistoryItem>
 {
-  protected databaseName: string = 'beaver';
+  protected databaseName: string = 'koreabeaver';
   protected primaryKey: string = 'id';
   protected tableName: string = 'circuits';
 

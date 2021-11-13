@@ -17,7 +17,7 @@ export interface MdcinItem extends IndexSignature
 
 export default class MdcinModel extends MysqlEloquent<MdcinItem>
 {
-  protected databaseName: string = 'beaver';
+  protected databaseName: string = 'koreabeaver';
   protected primaryKey: string = 'id';
   protected tableName: string = 'data24_raw_mdcin';
 

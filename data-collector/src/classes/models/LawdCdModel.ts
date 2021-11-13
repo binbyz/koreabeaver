@@ -21,7 +21,7 @@ export interface LawdCdItem extends IndexSignature
  */
 export default class LawdCdModel extends MysqlEloquent<LawdCdItem>
 {
-  protected databaseName: string = 'beaver';
+  protected databaseName: string = 'koreabeaver';
   protected primaryKey: string = 'code';
   protected tableName: string = 'LAWD_CD';
 

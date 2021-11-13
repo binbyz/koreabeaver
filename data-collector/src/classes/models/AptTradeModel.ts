@@ -63,7 +63,7 @@ export interface AptTradeItem extends IndexSignature
 
 export default class AptTradeModel extends MysqlEloquent<AptTradeItem>
 {
-  protected databaseName: string = 'beaver';
+  protected databaseName: string = 'koreabeaver';
   protected primaryKey: string = 'id';
   protected tableName: string = 'molit_raw_apt_trade';
 
