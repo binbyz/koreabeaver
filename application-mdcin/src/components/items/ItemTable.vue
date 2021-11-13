@@ -3,36 +3,44 @@ h3.g-item-title {{ groupTitle }}
 table.item-table
   caption {{ groupTitle }}
   colgroup
-    col.status
+    col.settle-date
     col.company-name
     col.item-name
-    col.company-address
-    col.settle-date
+    col.expose-content
   thead
     tr
-      th 상태
-      th 회사명
-      th 상품명
-      th 주소지
       th 행정처분일자
+      th 회사명
+      th 제품명
+      th 위반내용
   tbody
-    tr(v-for="item in items")
+    tr(v-for="item in items", :key="item.id")
       td
-        span.g-status.bad 나쁨
-      td {{ item.ENTP_NAME }}
-      td.item-name {{ item.ITEM_NAME }}
-      td.company-address {{ item.ADDR }}
-      td {{ item.LAST_SETTLE_DATE }}
+        SettleDate(:settle-date="item.LAST_SETTLE_DATE")
+      td.item-name
+        CompanyName(:item-name="item.ENTP_NAME", :address="item.ADDR")
+      td
+      td
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import { ItemTableRow } from '@/components/items/types'
+import SettleDate from '@/components/items/parts/SettleDate.vue'
+import CompanyName from '@/components/items/parts/CompanyName.vue'
+import ItemName from '@/components/items/parts/ItemName.vue'
+import ExposeContent from '@/components/items/parts/ExposeContent.vue'
 
 export default defineComponent({
   props: {
     groupTitle: String,
     items: Object as PropType<ItemTableRow[]>
+  },
+  components: {
+    SettleDate,
+    CompanyName,
+    ItemName,
+    ExposeContent
   }
 })
 </script>
@@ -50,11 +58,10 @@ table.item-table {
     display: none;
   }
   colgroup {
-    col.status { width: 7%; }
-    col.company-name { width: 18%; }
-    col.item-name { width: 35%; }
-    col.company-address { width: 30%; }
     col.settle-date { width: 10%; }
+    col.company-name { width: 20%; }
+    col.item-name { width: 30%; }
+    col.expose-content { width: 40%; }
   }
   th, td {
     padding: 10px 10px;
@@ -81,7 +88,7 @@ table.item-table {
     &.item-name {
       text-align: left;
     }
-    &.company-address {
+    &.expose-content {
       text-align: left;
     }
   }

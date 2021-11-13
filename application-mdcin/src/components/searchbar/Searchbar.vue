@@ -39,7 +39,7 @@ export default defineComponent({
     font-size: 16px;
     color: $accent-color;
     border: 1px solid $color-silver;
-    border-radius: 15px;
+    border-radius: $component-radius;
     width: 100%;
     box-sizing: border-box;
   }

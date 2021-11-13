@@ -1,6 +1,6 @@
 <template lang="pug">
 app-body
-  item-table(group-title="최신 행정처분", :items="recentlySettleItems")
+  item-table(group-title="의약품 행정처분", :items="recentlySettleItems")
 </template>
 
 <script lang="ts">

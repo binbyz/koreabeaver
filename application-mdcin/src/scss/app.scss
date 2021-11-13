@@ -16,6 +16,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   color: $font-color;
   @include reset-margin;
+  font-size: 14px;
 }
 
 a {
