@@ -25,7 +25,17 @@ export class MdcinService {
   findAll(sort: string, take: number, skip: number): Promise<Data24RawMdcin[]> {
     const [sortField, sortType] = MdcinService.getSortFieldName(sort);
 
+    const fields: (keyof Data24RawMdcin)[] = [
+      'id',
+      'ENTP_NO',
+      'ENTP_NAME',
+      'ADDR',
+      'ITEM_NAME',
+      'LAST_SETTLE_DATE',
+    ];
+
     return this.mdcinRepository.find({
+      select: fields,
       take: take,
       skip: skip,
       order: {
