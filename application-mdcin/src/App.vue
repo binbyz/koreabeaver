@@ -3,7 +3,8 @@
   .responsive-contents
     app-header
     app-nav-search
-    main-content
+    app-body
+      router-view
   app-footer
 </template>
 
@@ -11,14 +12,14 @@
 import { defineComponent } from 'vue'
 import AppHeader from '@/components/AppHeader.vue'
 import AppNavSearch from '@/components/AppNavSearch.vue'
-import MainContent from '@/components/main/MainContent.vue'
+import AppBody from '@/components/AppBody.vue'
 import AppFooter from '@/components/AppFooter.vue'
 
 export default defineComponent({
   components: {
     AppHeader,
     AppNavSearch,
-    MainContent,
+    AppBody,
     AppFooter
   }
 })

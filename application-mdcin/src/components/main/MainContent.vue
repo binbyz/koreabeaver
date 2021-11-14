@@ -1,17 +1,14 @@
 <template lang="pug">
-app-body
-  item-table(group-title="의약품 행정처분", :items="recentlySettleItems")
+item-table(group-title="의약품 행정처분", :items="recentlySettleItems")
 </template>
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
-import AppBody from '@/components/AppBody.vue'
 import ItemTable from '@/components/items/ItemTable.vue'
 import { fetchLatestGoods } from '@/api/goods'
 
 export default defineComponent({
   components: {
-    AppBody,
     ItemTable
   },
   setup () {
