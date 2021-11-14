@@ -32,6 +32,7 @@ export class MdcinService {
       'ADDR',
       'ITEM_NAME',
       'LAST_SETTLE_DATE',
+      'EXPOSE_CONT',
     ];
 
     return this.mdcinRepository.find({

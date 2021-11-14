@@ -5,25 +5,32 @@
     span {{ entpName }}
   .rows.address(v-if="address.trim().length")
     i.fa-regular.fa-map(@click="redirectMap(address)")
-    span {{ address }}
+    span {{ computedAddress }}
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent, toRefs } from 'vue'
 
 export default defineComponent({
   props: {
     entpName: String,
     address: String
   },
+  setup (props) {
+    const { address } = toRefs(props)
+
+    const computedAddress = computed(() => {
+      const splitted = (address.value as string).split(' ')
+
+      splitted.shift()
+      return splitted.join(' ')
+    })
+
+    return {
+      computedAddress
+    }
+  },
   methods: {
-    // copyText (text: string, e: Event) {
-    //   const clipboard = new Clipboard(e.target as Element, {
-    //     text () {
-    //       return text
-    //     }
-    //   })
-    // },
     redirectMap (address: string) {
       window.open(`https://map.naver.com/v5/search/${address}`)
     }
