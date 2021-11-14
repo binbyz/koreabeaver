@@ -1,7 +1,7 @@
 <template lang="pug">
 span.item-name-box
   span.status.bad
-  a(href="#")
+  router-link(:to="{ path: '/v/' + id }")
     span {{ itemName }}
 </template>
 
@@ -10,6 +10,7 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   props: {
+    id: Number,
     itemName: String
   }
 })

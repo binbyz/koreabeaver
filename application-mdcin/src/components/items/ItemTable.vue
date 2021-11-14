@@ -22,7 +22,7 @@ table.item-table
       td
         EntpName(:entp-name="item.ENTP_NAME", :address="item.ADDR")
       td
-        ItemName(:item-name="item.ITEM_NAME")
+        ItemName(:id="item.id", :item-name="item.ITEM_NAME")
       td
         ExposeContent(:expose-content="item.EXPOSE_CONT")
 </template>
