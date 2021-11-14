@@ -40,6 +40,10 @@ ul, li {
   @include reset-margin;
 }
 
+p {
+  @include reset-margin;
+}
+
 footer {
   @include reset-margin;
 }

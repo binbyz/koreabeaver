@@ -4,7 +4,7 @@ table.item-table
   caption {{ groupTitle }}
   colgroup
     col.settle-date
-    col.company-name
+    col.entp-name
     col.item-name
     col.expose-content
   thead
@@ -12,22 +12,26 @@ table.item-table
       th 행정처분일자
       th 회사명
       th 제품명
-      th 위반내용
+      th
+        i.fa-solid.fa-triangle-exclamation
+        span 위반내용
   tbody
     tr(v-for="item in items", :key="item.id")
       td
         SettleDate(:settle-date="item.LAST_SETTLE_DATE")
-      td.item-name
-        CompanyName(:item-name="item.ENTP_NAME", :address="item.ADDR")
       td
+        EntpName(:entp-name="item.ENTP_NAME", :address="item.ADDR")
       td
+        ItemName(:item-name="item.ITEM_NAME")
+      td
+        ExposeContent(:expose-content="item.EXPOSE_CONT")
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import { ItemTableRow } from '@/components/items/types'
 import SettleDate from '@/components/items/parts/SettleDate.vue'
-import CompanyName from '@/components/items/parts/CompanyName.vue'
+import EntpName from '@/components/items/parts/EntpName.vue'
 import ItemName from '@/components/items/parts/ItemName.vue'
 import ExposeContent from '@/components/items/parts/ExposeContent.vue'
 
@@ -38,7 +42,7 @@ export default defineComponent({
   },
   components: {
     SettleDate,
-    CompanyName,
+    EntpName,
     ItemName,
     ExposeContent
   }
@@ -59,9 +63,9 @@ table.item-table {
   }
   colgroup {
     col.settle-date { width: 10%; }
-    col.company-name { width: 20%; }
-    col.item-name { width: 30%; }
-    col.expose-content { width: 40%; }
+    col.entp-name { width: 20%; }
+    col.item-name { width: 35%; }
+    col.expose-content { width: 35%; }
   }
   th, td {
     padding: 10px 10px;
@@ -77,6 +81,9 @@ table.item-table {
     border-style: solid;
     line-height: $line-height;
     border-spacing: 0 0;
+    .fa-triangle-exclamation {
+      margin-right: 3px;
+    }
   }
   td {
     text-align: center;

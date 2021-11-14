@@ -16,10 +16,15 @@ export default defineComponent({
 
 .app-footer {
   display: flex;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
   flex-wrap: wrap;
   justify-content: center;
   background-color: $color-silver-soft;
   border-top: 1px solid $color-silver;
+  margin-top: 15px;
   a {
     display: block;
     padding: 15px;
