@@ -40,4 +40,9 @@ export class MdcinController {
 
     return result;
   }
+
+  @Get('item/:id')
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.mdcinService.findOne(id);
+  }
 }
