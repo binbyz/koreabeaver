@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   { path: '/', component: () => import('@/components/main/MainContent.vue') },
-  { path: '/v/:id', component: () => import('@/components/detail/DetailView.vue') }
+  { path: '/item/:id', component: () => import('@/components/items/ItemDetail.vue') }
 ]
 
 export const router = createRouter({

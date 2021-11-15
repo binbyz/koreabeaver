@@ -29,7 +29,7 @@ table.item-table
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import { ItemTableRow } from '@/components/items/types'
+import { MdcinItem } from '@/api/types'
 import SettleDate from '@/components/items/parts/SettleDate.vue'
 import EntpName from '@/components/items/parts/EntpName.vue'
 import ItemName from '@/components/items/parts/ItemName.vue'
@@ -38,7 +38,7 @@ import ExposeContent from '@/components/items/parts/ExposeContent.vue'
 export default defineComponent({
   props: {
     groupTitle: String,
-    items: Object as PropType<ItemTableRow[]>
+    items: Object as PropType<Partial<MdcinItem>[]>
   },
   components: {
     SettleDate,

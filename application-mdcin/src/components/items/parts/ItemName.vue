@@ -1,7 +1,7 @@
 <template lang="pug">
 span.item-name-box
   span.status.bad
-  router-link(:to="{ path: '/v/' + id }")
+  router-link(:to="{ path: '/item/' + id }")
     span {{ itemName }}
 </template>
 
