@@ -1,6 +1,12 @@
 <template lang="pug">
-span.computed-settle-date {{ computedSettleDate }}
+span.computed-settle-date-box {{ computedSettleDate }}
 </template>
+
+<style lang="scss" scoped>
+.computed-settle-date-box {
+  font-size: 14px;
+}
+</style>
 
 <script lang="ts">
 import { defineComponent, computed, toRefs } from 'vue'
@@ -24,9 +30,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style lang="scss" scoped>
-.computed-settle-date {
-  font-size: 14px;
-}
-</style>

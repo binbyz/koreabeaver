@@ -3,7 +3,7 @@ export interface MdcinItem
   id: number;
   ADM_DISPS_SEQ: number; // 행정처분일련번호
   ENTP_NAME: string; // 업소명
-  ADDR: string | null; // 업소소재지
+  ADDR: string; // 업소소재지
   ENTP_NO: number; // 업허가번호
   ITEM_NAME: string; // 제품명
   BEF_APPLY_LAW: string | null; // 위반법명

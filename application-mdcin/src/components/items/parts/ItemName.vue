@@ -5,17 +5,6 @@ span.item-name-box
     span {{ itemName }}
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  props: {
-    id: Number,
-    itemName: String
-  }
-})
-</script>
-
 <style lang="scss" scoped>
 @import '@/scss/_variables.scss';
 
@@ -43,7 +32,7 @@ export default defineComponent({
     border-radius: 5px;
     font-size: 11px;
     margin-right: 5px;
-    vertical-align: 2px;
+    vertical-align: middle;
     &.bad:before {
       display: block;
       content: "나쁨";
@@ -54,3 +43,14 @@ export default defineComponent({
   }
 }
 </style>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  props: {
+    id: Number,
+    itemName: String
+  }
+})
+</script>
