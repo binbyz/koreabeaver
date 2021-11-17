@@ -70,7 +70,7 @@
 </style>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, ref } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { fetchItem } from '@/api/mdcin'
 import { MdcinItem } from '@/api/types'
@@ -111,11 +111,10 @@ export default defineComponent({
       item.value = response.data
     }
 
-    onBeforeMount(requestItem)
+    requestItem()
 
     return {
-      item,
-      requestItem
+      item
     }
   }
 })
