@@ -1,11 +1,12 @@
 <template lang="pug">
 span.computed-settle-term-date-box(v-if="termDate.length")
   i.far.fa-calendar-check
-  time(:datetime="computedDateMoment('start').format('YYYY-MM-DD')")
-    span {{ computedDateMoment('start').format('YYYY년 MM월 DD일') }}
-  span.during ~
-  time(:datetime="computedDateMoment('end').format('YYYY-MM-DD')")
-    span {{ computedDateMoment('end').format('YYYY년 MM월 DD일') }}
+  span(:class="{ 'passed': !isPassed }")
+    time(:datetime="computedDateMoment('start').format('YYYY-MM-DD')")
+      span {{ computedDateMoment('start').format('YYYY년 MM월 DD일') }}
+    span.during ~
+    time(:datetime="computedDateMoment('end').format('YYYY-MM-DD')")
+      span {{ computedDateMoment('end').format('YYYY년 MM월 DD일') }}
 </template>
 
 <style lang="scss" scoped>
@@ -13,6 +14,10 @@ span.computed-settle-term-date-box(v-if="termDate.length")
 
 .computed-settle-term-date-box {
   font-size: 14px;
+  .passed {
+    display: inline;
+    box-shadow: inset 0 -10px 0 rgba(152, 236, 191, .5);
+  }
   > .fa-calendar-check {
     display: inline-block;
     margin-right: 5px;
@@ -27,7 +32,7 @@ span.computed-settle-term-date-box(v-if="termDate.length")
 
 <script lang="ts">
 import moment from 'moment'
-import { computed, defineComponent, toRefs } from 'vue'
+import { computed, ComputedRef, defineComponent, toRefs } from 'vue'
 
 export default defineComponent({
   props: {
@@ -39,13 +44,22 @@ export default defineComponent({
   setup (props) {
     const { termDate } = toRefs(props)
 
-    const computedDateMoment = computed(() => {
+    const computedDateMoment: ComputedRef<(p: 'start' | 'end') => moment.Moment> = computed(() => {
       const splitted = termDate.value.split('~')
       return (p: 'start' | 'end') => moment((p === 'start') ? splitted[0] : splitted[1])
     })
 
+    const isPassed = computed(() => {
+      const splitted = termDate.value.split('~')
+
+      return moment().isBetween(
+        moment(splitted[0]),
+        moment(splitted[1])
+      )
+    })
     return {
-      computedDateMoment
+      computedDateMoment,
+      isPassed
     }
   }
 })
