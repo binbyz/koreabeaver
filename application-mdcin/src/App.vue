@@ -38,7 +38,7 @@ export default defineComponent({
   margin: 0 auto;
   border-top: 6px solid $accent-color;
   box-sizing: border-box;
-  padding-bottom: 50px;
+  padding-bottom: 100px;
   .responsive-contents {
     display: flex;
     height: 100%;
