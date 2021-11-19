@@ -11,12 +11,12 @@ span.computed-settle-term-date-box(v-if="termDate.length")
 
 <style lang="scss" scoped>
 @import '@/scss/_variables.scss';
+@import '@/scss/_mixins.scss';
 
 .computed-settle-term-date-box {
   font-size: 14px;
   .passed {
-    display: inline;
-    box-shadow: inset 0 -10px 0 rgba(152, 236, 191, .5);
+    @include highlight-text();
   }
   > .fa-calendar-check {
     display: inline-block;

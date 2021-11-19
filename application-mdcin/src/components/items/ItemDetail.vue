@@ -1,12 +1,23 @@
 <template lang="pug">
-.item-detail
-  .item-db
-    ItemName(:id="item.id", :item-name="item.ITEM_NAME")
-    EntpName(:entp-name="item.ENTP_NAME", :address="item.ADDR")
-    SettleDate(:settle-date="item.LAST_SETTLE_DATE", :with-ymd="true")
-    SettleTermDate(:term-date="item.DISPS_TERM_DATE")
-  .item-image
-    ItemImage()
+article.item-detail-box
+  .item-detail
+    section.item-db
+      ItemName(:id="item.id", :item-name="item.ITEM_NAME")
+      EntpName(:entp-name="item.ENTP_NAME", :address="item.ADDR")
+      SettleDate(:settle-date="item.LAST_SETTLE_DATE", :with-ymd="true")
+      SettleTermDate(:term-date="item.DISPS_TERM_DATE")
+    section.item-image
+      ItemImage()
+  .item-violation
+    section.row.expose-content(v-if="item.EXPOSE_CONT.length")
+      ItemTitle(title="위반내용")
+      p(v-html="item.EXPOSE_CONT")
+    section.row.disps-name(v-if="item.ADM_DISPS_NAME.length")
+      ItemTitle(title="행정처분명")
+      p(v-html="item.ADM_DISPS_NAME")
+    section.row.apply-law(v-if="item.BEF_APPLY_LAW.length")
+      ItemTitle(title="위반법명")
+      p(v-html="item.BEF_APPLY_LAW")
 </template>
 
 <style lang="scss" scoped>
@@ -20,51 +31,65 @@
   font-size: 13px;
 }
 
-.item-detail {
+.item-detail-box {
   display: flex;
-  flex-direction: row;
-  height: 400px;
-  justify-content: space-evenly;
-  .item-db {
+  flex-direction: column;
+  .item-detail {
     display: flex;
-    flex-direction: column;
-    flex-basis: 35%;
-    max-width: 35%;
-    height: 100%;
-    justify-content: flex-start;
-    .item-name-box {
-      font-size: 200%;
-      white-space: break-spaces;
-      margin-bottom: 30px;
-      a {
-        h3.item-name {
-          font-size: 120%;
+    flex-direction: row;
+    height: 350px;
+    justify-content: space-evenly;
+    .item-db {
+      display: flex;
+      flex-direction: column;
+      flex-basis: 35%;
+      max-width: 35%;
+      height: 100%;
+      justify-content: flex-start;
+      .item-name-box {
+        font-size: 200%;
+        white-space: break-spaces;
+        margin-bottom: 30px;
+        a {
+          h3.item-name {
+            font-size: 120%;
+          }
+        }
+      }
+      .computed-settle-date-box {
+        font-size: 120%;
+        margin-bottom: 20px;
+        &:before {
+          @include inforText("행정처분일자")
+        }
+      }
+      .computed-settle-term-date-box {
+        font-size: 120%;
+        margin-bottom: 20px;
+        &:before {
+          @include inforText("행정처분기간")
+        }
+      }
+      .company-name-box {
+        margin-bottom: 20px;
+        &:before {
+          @include inforText("업소소재지");
         }
       }
     }
-    .computed-settle-date-box {
-      font-size: 120%;
-      margin-bottom: 20px;
-      &:before {
-        @include inforText("행정처분일자")
-      }
-    }
-    .computed-settle-term-date-box {
-      font-size: 120%;
-      margin-bottom: 20px;
-      &:before {
-        @include inforText("행정처분기간")
-      }
-    }
-    .company-name-box {
-      margin-bottom: 20px;
-      &:before {
-        @include inforText("업소소재지");
-      }
+    .item-image {
+      flex-basis: 40%;
     }
   }
-  .item-image {
-    flex-basis: 40%;
+  .item-violation {
+    display: flex;
+    flex-direction: column;
+    section.row {
+      margin-bottom: 20px;
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
   }
 }
 </style>
@@ -78,8 +103,8 @@ import SettleDate from '@/components/items/parts/SettleDate.vue'
 import SettleTermDate from '@/components/items/parts/SettleTermDate.vue'
 import EntpName from '@/components/items/parts/EntpName.vue'
 import ItemName from '@/components/items/parts/ItemName.vue'
-import ExposeContent from '@/components/items/parts/ExposeContent.vue'
 import ItemImage from '@/components/items/parts/ItemImage.vue'
+import ItemTitle from '@/components/items/ItemTitle.vue'
 
 export default defineComponent({
   components: {
@@ -87,8 +112,8 @@ export default defineComponent({
     SettleTermDate,
     EntpName,
     ItemName,
-    ExposeContent,
-    ItemImage
+    ItemImage,
+    ItemTitle
   },
   setup () {
     const route = useRoute()

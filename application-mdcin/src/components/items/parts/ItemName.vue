@@ -2,7 +2,7 @@
 span.item-name-box
   span.status.bad
   router-link(:to="{ path: '/item/' + id }")
-    span {{ itemName }}
+    strong {{ itemName }}
 </template>
 
 <style lang="scss" scoped>
@@ -40,6 +40,9 @@ span.item-name-box
   }
   a {
     color: $accent-color;
+    > strong {
+      font-weight: normal;
+    }
   }
 }
 </style>

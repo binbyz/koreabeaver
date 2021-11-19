@@ -1,5 +1,5 @@
 <template lang="pug">
-h3.g-item-title {{ groupTitle }}
+ItemTitle(:title="groupTitle")
 table.item-table
   caption {{ groupTitle }}
   colgroup
@@ -30,6 +30,7 @@ table.item-table
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import { MdcinItem } from '@/api/types'
+import ItemTitle from '@/components/items/ItemTitle.vue'
 import SettleDate from '@/components/items/parts/SettleDate.vue'
 import EntpName from '@/components/items/parts/EntpName.vue'
 import ItemName from '@/components/items/parts/ItemName.vue'
@@ -41,6 +42,7 @@ export default defineComponent({
     items: Object as PropType<Partial<MdcinItem>[]>
   },
   components: {
+    ItemTitle,
     SettleDate,
     EntpName,
     ItemName,

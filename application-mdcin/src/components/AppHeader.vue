@@ -1,6 +1,6 @@
 <template lang="pug">
 header.app-header
-  h1.logo
+  div.logo(role="banner")
     a(href="./") <strong>코리아비버</strong>
   span.slogun 대한민국 <strong>소비자</strong>의 알 권리
 </template>
@@ -30,6 +30,9 @@ export default defineComponent({
     a {
       color: $accent-color;
       font-size: 32px;
+      > strong {
+        font-weight: normal;
+      }
     }
   }
   .slogun {

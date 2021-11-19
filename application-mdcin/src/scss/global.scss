@@ -1,16 +1,2 @@
 @import '@/scss/_mixins.scss';
 @import '@/scss/_variables.scss';
-
-h3 {
-  &.g-item-title {
-    color: $accent-color;
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 15px;
-    &:before {
-      display: inline-block;
-      content: "☠️";
-      margin-right: 10px;
-    }
-  }
-}
