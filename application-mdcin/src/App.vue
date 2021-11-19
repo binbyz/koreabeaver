@@ -1,5 +1,6 @@
 <template lang="pug">
 .core
+  horizontal-progress-bar
   .responsive-contents
     app-header
     app-nav-search
@@ -10,6 +11,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import HorizontalProgressBar from '@/components/contents/HorizontalProgressBar.vue'
 import AppHeader from '@/components/AppHeader.vue'
 import AppNavSearch from '@/components/AppNavSearch.vue'
 import AppBody from '@/components/AppBody.vue'
@@ -17,6 +19,7 @@ import AppFooter from '@/components/AppFooter.vue'
 
 export default defineComponent({
   components: {
+    HorizontalProgressBar,
     AppHeader,
     AppNavSearch,
     AppBody,
@@ -36,7 +39,6 @@ export default defineComponent({
   width: 100%;
   min-height: 100%;
   margin: 0 auto;
-  border-top: 6px solid $accent-color;
   box-sizing: border-box;
   padding-bottom: 100px;
   .responsive-contents {

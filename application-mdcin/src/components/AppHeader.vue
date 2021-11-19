@@ -15,6 +15,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import '@/scss/_variables.scss';
+@import '@/scss/_mixins.scss';
 
 .app-header {
   display: flex;
@@ -32,6 +33,8 @@ export default defineComponent({
       font-size: 32px;
       > strong {
         font-weight: normal;
+        letter-spacing: -2px;
+        @include highlight-text();
       }
     }
   }
