@@ -2,7 +2,7 @@
 header.app-header
   div.logo(role="banner")
     a(href="./") <strong>코리아비버</strong>
-  span.slogun 대한민국 <strong>소비자</strong>의 알 권리
+  span.slogun 대한민국&nbsp;<strong>소비자</strong>의 알 권리
 </template>
 
 <script lang="ts">
