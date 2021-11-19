@@ -9,13 +9,13 @@ article.item-detail-box
     section.item-image
       ItemImage()
   .item-violation
-    section.row.expose-content(v-if="item.EXPOSE_CONT.length")
+    section.row.expose-content(v-if="item.EXPOSE_CONT")
       ItemTitle(title="위반내용")
       p(v-html="item.EXPOSE_CONT")
-    section.row.disps-name(v-if="item.ADM_DISPS_NAME.length")
+    section.row.disps-name(v-if="item.ADM_DISPS_NAME")
       ItemTitle(title="행정처분명")
       p(v-html="item.ADM_DISPS_NAME")
-    section.row.apply-law(v-if="item.BEF_APPLY_LAW.length")
+    section.row.apply-law(v-if="item.BEF_APPLY_LAW")
       ItemTitle(title="위반법명")
       p(v-html="item.BEF_APPLY_LAW")
 </template>
