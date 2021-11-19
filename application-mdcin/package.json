@@ -39,7 +39,7 @@
     "pug-plain-loader": "^1.1.0",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
-    "typescript": "~4.1.5"
+    "typescript": "^4.5.1"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
