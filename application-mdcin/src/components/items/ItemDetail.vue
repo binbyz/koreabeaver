@@ -11,13 +11,13 @@ article.item-detail-box
   .item-violation
     section.row.expose-content(v-if="item.EXPOSE_CONT")
       ItemTitle(title="위반내용")
-      p(v-html="item.EXPOSE_CONT")
+      p(v-html="nl2br(item.EXPOSE_CONT)")
     section.row.disps-name(v-if="item.ADM_DISPS_NAME")
       ItemTitle(title="행정처분명")
-      p(v-html="item.ADM_DISPS_NAME")
+      p(v-html="nl2br(item.ADM_DISPS_NAME)")
     section.row.apply-law(v-if="item.BEF_APPLY_LAW")
       ItemTitle(title="위반법명")
-      p(v-html="item.BEF_APPLY_LAW")
+      p(v-html="nl2br(item.BEF_APPLY_LAW)")
 </template>
 
 <style lang="scss" scoped>
@@ -86,8 +86,9 @@ article.item-detail-box
     flex-direction: column;
     section.row {
       margin-bottom: 20px;
-      &:last-child {
-        margin-bottom: 0;
+      p {
+        font-size: 120%;
+        line-height: 160%;
       }
     }
   }
@@ -136,10 +137,15 @@ export default defineComponent({
       item.value = response.data
     }
 
+    const nl2br = (rawText: string): string => {
+      return rawText.split('\n').join('<br>')
+    }
+
     requestItem()
 
     return {
-      item
+      item,
+      nl2br
     }
   }
 })
