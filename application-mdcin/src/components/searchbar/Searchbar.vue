@@ -10,27 +10,11 @@ form.form-searchbar
   button.submit(type="submit") 검색
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  data () {
-    return {
-      keyword: ''
-    }
-  },
-  methods: {
-    changeKeyword (e: KeyboardEvent): void {
-      this.keyword = (e.target as HTMLInputElement).value
-    }
-  }
-})
-</script>
-
 <style lang="scss" scoped>
 @import '@/scss/_variables.scss';
 
 .form-searchbar {
+  position: relative;
   width: 80%;
   input.search {
     box-shadow: none;
@@ -42,9 +26,31 @@ export default defineComponent({
     border-radius: $component-radius;
     width: 100%;
     box-sizing: border-box;
+    &:focus {
+      box-shadow: 0 2px 8px 1px rgb(64 60 67 / 24%);
+    }
   }
   button.submit {
     display: none;
   }
 }
 </style>
+
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
+
+export default defineComponent({
+  setup () {
+    const keyword = ref('')
+
+    const changeKeyword = (e: KeyboardEvent): void => {
+      keyword.value = (e.target as HTMLInputElement).value
+    }
+
+    return {
+      keyword,
+      changeKeyword
+    }
+  }
+})
+</script>
