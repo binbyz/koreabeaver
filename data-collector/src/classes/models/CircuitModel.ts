@@ -8,6 +8,7 @@ export enum CircuitTypes {
   DATA24_MDCIN = 1, // 의약행정처분 circuit
   APT_TRADE = 2, // 아파트거래 circuit
   MDCIN_CONVERTER = 3, // 의약행정처분 converter circuit
+  DATA24_FOOD = 4, // 식품 허위/과장 광고 converter circuit
 }
 
 export interface CircuitHistoryItem extends IndexSignature
