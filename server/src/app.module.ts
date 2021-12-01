@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection, getConnectionOptions } from 'typeorm';
 
 import { MdcinModule } from './mdcin/mdcin.module';
+import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { MdcinModule } from './mdcin/mdcin.module';
         }),
     }),
     MdcinModule,
+    SearchModule,
   ],
   controllers: [],
   providers: [],
