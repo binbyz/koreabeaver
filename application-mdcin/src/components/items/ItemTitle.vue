@@ -10,7 +10,7 @@ h3.item-title
 .item-title {
   display: block;
   color: $accent-color;
-  font-size: 28px;
+  font-size: 24px;
   font-weight: normal;
   margin-bottom: 15px;
   > .text {
