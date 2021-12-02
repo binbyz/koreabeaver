@@ -81,10 +81,10 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
     if (items.length) {
       // upsert massive
       await this.mdcinModel.upserts(items, 'ADM_DISPS_SEQ', ['ENTP_NAME', 'ADDR', 'ITEM_NAME']);
-    }
 
-    // 마지막 히스토리 업데이트
-    this.updateHistory();
+      // 마지막 히스토리 업데이트
+      this.updateHistory();
+    }
   }
 
   private updateHistory(): void
