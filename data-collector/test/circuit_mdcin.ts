@@ -1,5 +1,5 @@
 /* eslint-disable */
-require('dotenv').config({ path: "../.env" });
+require('dotenv').config({ path: "../.env.test" });
 
 import Circuit from "../src/classes/circuit/Circuit";
 import MdcinCollector from "../src/classes/collector/MdcinCollector";
