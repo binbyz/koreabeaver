@@ -11,5 +11,5 @@ function main() {
 
   // circuit
   const circuit = new Circuit([mdcinCollector]);
-  circuit.tick(5000).loop(Infinity).fire();
+  circuit.tick(3000).loop(Infinity).fire();
 }

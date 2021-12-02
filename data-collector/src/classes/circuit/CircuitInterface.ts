@@ -2,10 +2,10 @@ import { IndexSignature } from "../../types";
 
 export namespace CircuitInterface
 {
-  export type BootFn = () => void;
-  export type PrepareFn = () => Promise<void>;
-  export type HandleFn = () => void;
-  export type AlwaysFn = () => void;
+  export type BootFn = (...args: any[]) => boolean;
+  export type PrepareFn = (...args: any[]) => Promise<void>;
+  export type HandleFn = (...args: any[]) => void;
+  export type AlwaysFn = (...args: any[]) => void;
 
   export interface Bodies extends IndexSignature
   {

@@ -29,13 +29,15 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
     this.historyModel = new CircuitModel();
   }
 
-  public boot()
+  public boot(): boolean
   {
     // 한 페이지 리스트 갯수
     this.setNumOfRows(this.numOfRows);
 
     // 이전 수집기 모델 히스토리
     this.historyModel.where('type', CircuitTypes.DATA24_MDCIN).orderBy('id', 'desc');
+
+    return true;
   }
 
   public async prepare(): Promise<void>
@@ -83,14 +85,15 @@ export default class MdcinCollector extends Data24Handler implements CircuitInte
       await this.mdcinModel.upserts(items, 'ADM_DISPS_SEQ', ['ENTP_NAME', 'ADDR', 'ITEM_NAME']);
 
       // 마지막 히스토리 업데이트
-      this.updateHistory();
+      await this.updateHistory();
     }
   }
 
-  private updateHistory(): void
+  private updateHistory(): Promise<any>
   {
     this.historyModel.clear();
-    this.historyModel.where('type', CircuitTypes.DATA24_MDCIN).update({
+
+    return this.historyModel.where('type', CircuitTypes.DATA24_MDCIN).update({
       "extra_data": {
         "last_page": this.pageNo,
         "last_updated": moment().format('YYYY-MM-DD HH:mm:ss')
