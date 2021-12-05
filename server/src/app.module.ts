@@ -16,7 +16,7 @@ import { SearchModule } from './search/search.module';
         }),
     }),
     MdcinModule,
-    SearchModule,
+    // SearchModule,
   ],
   controllers: [],
   providers: [],
