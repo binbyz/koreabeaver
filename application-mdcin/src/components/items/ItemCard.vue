@@ -1,24 +1,31 @@
 <template lang="pug">
 article.main-content
-  h3.title {{ title }}
+  ItemTitle(:title="title")
   div.content-wrap
-    section.preview-one test1
-    section.preview-one test2
-    section.preview-one test3
-    section.preview-one test4
-    section.preview-one test5
-    section.preview-one test6
+    section.preview-one(v-for="item in items" :key="item.id")
+      .item-image Image
+      .item-name
+        strong {{ item.ITEM_NAME }}
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
+import ItemTitle from '@/components/items/ItemTitle.vue'
+import { MdcinItem } from '@/api/types'
 
 export default defineComponent({
   props: {
     title: {
       type: String,
       required: true
+    },
+    items: {
+      type: Object as PropType<Partial<MdcinItem>[]>,
+      required: true
     }
+  },
+  components: {
+    ItemTitle
   }
 })
 </script>
@@ -40,13 +47,24 @@ export default defineComponent({
     align-content: space-around;
     align-content: space-evenly;
     align-items: stretch;
-    height: 400px;
     .preview-one {
-      flex-basis: 30%;
+      display: flex;
+      flex-direction: column;
+      flex-basis: 22%;
       flex-grow: 0;
       flex-shrink: 1;
-      height: 45%;
+      height: 200px;
       border: 1px solid;
+      margin-bottom: 15px;
+      .item-image {
+        flex-grow: 3;
+      }
+      .item-name {
+        display: flex;
+        flex-grow: 1;
+        justify-content: center;
+        align-items: center;
+      }
     }
   }
 }

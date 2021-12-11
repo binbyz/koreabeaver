@@ -32,9 +32,8 @@ export default defineComponent({
       color: $accent-color;
       font-size: 32px;
       > strong {
-        font-weight: normal;
+        font-weight: 500;
         letter-spacing: -2px;
-        @include highlight-text();
       }
     }
   }

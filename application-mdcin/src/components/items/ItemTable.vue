@@ -38,7 +38,7 @@ import ExposeContent from '@/components/items/parts/ExposeContent.vue'
 
 export default defineComponent({
   props: {
-    groupTitle: String,
+    title: String,
     items: Object as PropType<Partial<MdcinItem>[]>
   },
   components: {

@@ -1,16 +1,18 @@
 <template lang="pug">
-item-table(group-title="의약품 행정처분", :items="recentlySettleItems")
+ItemCard(title="의약품 행정처분", :items="recentlySettleItems")
 </template>
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
 import ItemTable from '@/components/items/ItemTable.vue'
+import ItemCard from '@/components/items/ItemCard.vue'
 import { fetchItems } from '@/api/mdcin'
 import { MdcinItem } from '@/api/types'
 
 export default defineComponent({
   components: {
-    ItemTable
+    ItemTable,
+    ItemCard
   },
   setup () {
     const recentlySettleItems = ref<Partial<MdcinItem>[]>([])
